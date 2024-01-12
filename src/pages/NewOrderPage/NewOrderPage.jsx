@@ -72,7 +72,7 @@ function NewOrderPage(props)
         <Link to="/orders" className="button btn-sm">PREVIOUS ORDERS</Link>
       </Sidebar>
       <MenuList
-        menuItems={menuItems.filter(item => item.category.name === activeCategory)}
+        menuItems={activeCategory ? menuItems.filter(item => item.category.name === activeCategory) : menuItems}
         handleAddToOrder={handleAddToOrder}
       />
       <OrderDetail

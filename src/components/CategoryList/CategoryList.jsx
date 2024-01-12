@@ -23,6 +23,7 @@ function CategoryList(props)
 
   return (
     <ul className={styles.CategoryList}>
+        <li onClick={() => setActiveCategory(undefined)}>All</li>
       { getCategories() }
     </ul>
   );

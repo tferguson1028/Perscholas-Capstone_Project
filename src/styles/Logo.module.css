@@ -1,13 +1,16 @@
 .Logo {
-  height: 12vmin;
-  width: 12vmin;
+  height: 12vmin !important;
+  width: 12vmin !important;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
+  border: .6vmin solid var(--tan-2);
   border-radius: 50%;
   background-color: var(--blue);
+  
   color: var(--tan-1);
   font-size: 2.7vmin;
-  border: .6vmin solid var(--tan-2);
 }
