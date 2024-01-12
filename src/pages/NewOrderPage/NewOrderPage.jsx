@@ -10,6 +10,7 @@ import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import UserLogOut from '../../components/UserLogOut/UserLogOut';
 
 import styles from "../../styles/NewOrderPage.module.css";
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 function NewOrderPage(props)
 {
@@ -62,16 +63,14 @@ function NewOrderPage(props)
   
   return (
     <main className={styles.NewOrderPage}>
-      <aside>
-        <Logo />
+      <Sidebar user={user} setUser={setUser} >
         <CategoryList
           categories={categoriesRef.current}
           cart={setCart}
           setActiveCat={setActiveCategory}
         />
         <Link to="/orders" className="button btn-sm">PREVIOUS ORDERS</Link>
-        <UserLogOut user={user} setUser={setUser} />
-      </aside>
+      </Sidebar>
       <MenuList
         menuItems={menuItems.filter(item => item.category.name === activeCategory)}
         handleAddToOrder={handleAddToOrder}

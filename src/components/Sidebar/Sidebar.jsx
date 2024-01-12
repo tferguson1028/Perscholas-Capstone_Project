@@ -8,7 +8,7 @@ import styles from "../../styles/Sidebar.module.css";
 
 function Sidebar(props) 
 {
-  const { user = {}, setUser = () => {}, children = [] } = props;
+  const { user = {name: "N/A"}, setUser = () => {}, children = [] } = props;
   
   return (
     <aside className={styles.aside}>
