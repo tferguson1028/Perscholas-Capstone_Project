@@ -1,16 +1,16 @@
 require('dotenv').config();
-require('./database');
+require('./config/database');
 
-const Category = require('../models/category');
-const Item = require('../models/item');
+const Category = require('./models/category');
+const Item = require('./models/item');
 
-(async function() {
-
+(async function ()
+{
   await Category.deleteMany({});
   const categories = await Category.create([
-    {name: 'Breakfast', sortOrder:10},
+    {name: 'Breakfast', sortOrder: 10},
     {name: 'Desserts', sortOrder: 20},
-    {name: 'Diner', sortOrder:30},
+    {name: 'Diner', sortOrder: 30},
     {name: 'Drinks', sortOrder: 40},
     {name: 'Italian', sortOrder: 50},
     {name: 'Mexican', sortOrder: 60},
@@ -22,7 +22,7 @@ const Item = require('../models/item');
   await Item.deleteMany({});
   const items = await Item.create([
     {name: 'Hamburger', emoji: '🍔', category: categories[2], price: 5.95},
-    {name: 'Noodles', emoji: '🍜',  category: categories[2], price: 11.95},
+    {name: 'Noodles', emoji: '🍜', category: categories[2], price: 11.95},
     {name: 'Fried Rice', emoji: '🍘', category: categories[2], price: 9.95},
     {name: 'Jollof Rice', emoji: '🍛', category: categories[2], price: 9.95},
     {name: 'Veggy Brochette', emoji: '🍢', category: categories[8], price: 3.95},
@@ -34,7 +34,7 @@ const Item = require('../models/item');
     {name: 'Turkey Sandwich', emoji: '🥪', category: categories[0], price: 6.95},
     {name: 'Hot Dog', emoji: '🌭', category: categories[2], price: 3.95},
     {name: 'Crab Plate', emoji: '🦀', category: categories[7], price: 14.95},
-    {name: 'Soft drink', emoji:'🥤', category: categories[3], price: 2.95},
+    {name: 'Soft drink', emoji: '🥤', category: categories[3], price: 2.95},
     {name: 'Fried Shrimp', emoji: '🍤', category: categories[7], price: 13.95},
     {name: 'Whole Lobster', emoji: '🦞', category: categories[7], price: 25.95},
     {name: 'Taco', emoji: '🌮', category: categories[5], price: 1.95},
