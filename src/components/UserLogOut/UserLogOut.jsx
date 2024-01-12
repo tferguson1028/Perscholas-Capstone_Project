@@ -1,23 +1,34 @@
 import React from 'react'
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 import * as userService from '../../utilities/users-service';
+import styles from "../../styles/UserLogout.module.css";
 
-function UserLogOut()
+function UserLogOut(props)
 {
-  function handleLogOut(props) 
+  const { user = {}, setUser = () => {} } = props;
+  
+  function handleLogOut() 
   {
-    const { setUser = () => {} } = props;
     // Delegate to the users-service
     // Update state will also cause a re-render
     userService.logOut();
     setUser(null);
   }
   
+  // return (
+  //   <>
+  //     <Link to="" onClick={handleLogOut}><button>Logout</button></Link>
+  //   </>
+  // );
+  
   return (
-    <>
-      <Link to="" onClick={handleLogOut}><button>Logout</button></Link>
-    </>
-  )
+    <div className={styles.UserLogOut}>
+      <div>{user.name}</div>
+      <div className={styles.email}>{user.email}</div>
+      <button className="btn-sm" onClick={handleLogOut}>LOG OUT</button>
+    </div>
+  );
+  
 }
 
 export default UserLogOut;
