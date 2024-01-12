@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import { signUp } from '../../utilities/users-service';
 
 
-export default class SignUpForm extends Component {
+export default class SignUpForm extends Component
+{
   state = {
     name: "",
     email: "",
@@ -11,37 +12,45 @@ export default class SignUpForm extends Component {
     error: "",
   };
 
-  handleChange = (evt) => {
+  handleChange = (evt) =>
+  {
     this.setState({
       [evt.target.name]: evt.target.value,
       error: ''
     });
   };
-  handleSubmit = async (evt) => {
+  handleSubmit = async (evt) =>
+  {
     evt.preventDefault();
     // alert(JSON.stringify(this.state));
-    try {
-        const formData = {...this.state};
-        delete formData.error;
-        delete formData.confirm;
-        const user = await signUp(formData);
-        console.log(user)
-
-    } catch (error) {
-        this.setState({
-            error: "Sign Up Failed - Try Again"
-        })
+    try
+    {
+      const formData = {...this.state};
+      
+      delete formData.error;
+      delete formData.confirm;
+      
+      const user = await signUp(formData);
+      console.log(user);
+      this.props.setUser(user);
+      
+    } catch (error)
+    {
+      this.setState({
+        error: "Sign Up Failed - Try Again"
+      })
     }
   };
 
-  render() {
+  render()
+  {
     const disable = this.state.password !== this.state.confirm;
 
     return (
       <>
         <div>SignUpForm</div>
         <div className="form-container">
-          <form autoComplete="off" onSubmit={this.handleSubmit} style={{margin:"1em"}}>
+          <form autoComplete="off" onSubmit={this.handleSubmit} style={{margin: "1em"}}>
             <label>Name</label>
             <input
               type="text"
@@ -80,7 +89,7 @@ export default class SignUpForm extends Component {
           </form>
         </div>
         <p className="error-message">{this.state.error}</p>
-        
+
       </>
     );
   }

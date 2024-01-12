@@ -34,7 +34,7 @@ async function create(req, res)
     let token = createJWT(user);
     console.log(`User : ${req.body}, Token: ${token}`);
     
-    res.status(200).res.json(token);
+    res.status(200).json(token);
   } catch (error)
   {
     console.log("ERROR:", error);
@@ -56,7 +56,7 @@ async function login(req, res, next = () => {})
     console.log(`MATCH FOUND: ${match}`)
     if (!match) throw new Error();
     
-    res.status(200).res.json(createJWT(user));
+    res.status(200).json(createJWT(user));
     next();
   } catch (error)
   {
