@@ -67,7 +67,7 @@ function NewOrderPage(props)
         <CategoryList
           categories={categoriesRef.current}
           cart={setCart}
-          setActiveCat={setActiveCategory}
+          setActiveCategory={setActiveCategory}
         />
         <Link to="/orders" className="button btn-sm">PREVIOUS ORDERS</Link>
       </Sidebar>
