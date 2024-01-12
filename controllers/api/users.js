@@ -17,7 +17,7 @@ function checkToken(req, res)
 
 function createJWT(user)
 {
-  console.log("Creating JWT")
+  console.log("Creating JWT");
   return jwt.sign(
     // data payload
     {user},
@@ -34,7 +34,7 @@ async function create(req, res)
     let token = createJWT(user);
     console.log(`User : ${req.body}, Token: ${token}`);
     
-    res.status(200).json(token);
+    respond(token);
   } catch (error)
   {
     console.log("ERROR:", error);
@@ -42,7 +42,7 @@ async function create(req, res)
   }
 }
 
-async function login(req, res, next = () => {})
+async function login(req, res)
 {
   try
   {
@@ -56,11 +56,22 @@ async function login(req, res, next = () => {})
     console.log(`MATCH FOUND: ${match}`)
     if (!match) throw new Error();
     
-    res.status(200).json(createJWT(user));
-    next();
+    respond(res, createJWT(user));
   } catch (error)
   {
     console.log("ERROR:", "Bad Credentials", error);
     res.status(400).json({ msg: error.message });
+  }
+}
+
+function respond(res, json)
+{
+  try
+  {
+    res.status(200).json(json);
+  }catch(exception)
+  {
+    console.log(exception);
+    res.status(400).json(exception);
   }
 }
