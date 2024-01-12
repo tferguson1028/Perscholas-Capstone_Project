@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import SignUpForm from "../../components/SignUpForm/SignUpForm";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import styles from "../../styles/AuthPage.css";
+import Logo from "../../components/Logo/Logo";
 
 function AuthPage(props)
 {
@@ -11,7 +12,7 @@ function AuthPage(props)
   return (
     <main className={styles.AuthPage}>
       <div>
-        <span></span>
+        <Logo />
         <h3 onClick={() => setShowLogin(!showLogin)}>{showLogin ? 'SIGN UP' : 'LOG IN'}</h3>
       </div>
       {showLogin ? <LoginForm setUser={setUser} /> : <SignUpForm setUser={setUser} />}

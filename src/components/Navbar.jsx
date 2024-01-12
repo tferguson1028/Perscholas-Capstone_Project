@@ -16,7 +16,7 @@ function Navbar({user ,setUser}) {
       <div style={{justifyContent:'space-around'}}>
         <p style={{margin:'1em'}}>Welcome {user.name}, </p><hr/>
         <p style={{margin:'1em'}}> Logged In : {user.email}</p>
-        <Link to="" onClick={handleLogOut}><button>Log-Out</button></Link>
+        <Link to="" onClick={handleLogOut}><button>Logout</button></Link>
       </div>
 
         <Link to="/orders">Order History</Link>
