@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react'
-import {useNavigate} from 'react-router-dom';
-// import * as itemsAPI from '../../utilities/items-api';
-// import * as ordersAPI from '../../utilities/orders-api';
+import { useNavigate } from 'react-router-dom';
+import * as itemsAPI from '../../utilities/items-api';
+import * as ordersAPI from '../../utilities/orders-api';
 
 import Logo from '../../components/Logo/Logo';
 import MenuList from '../../components/MenuList/MenuList';
