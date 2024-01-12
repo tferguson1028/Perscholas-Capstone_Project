@@ -32,15 +32,17 @@ async function create(req, res)
   {
     let user = await User.create(req.body);
     let token = createJWT(user);
-    res.json(token);
     console.log(`User : ${req.body}, Token: ${token}`);
+    
+    res.status(200).res.json(token);
   } catch (error)
   {
-    res.status(400).json(error);
+    console.log("ERROR:", error);
+    res.status(400).json({ msg: error.message });
   }
 }
 
-async function login(req, res, next)
+async function login(req, res, next = () => {})
 {
   try
   {
@@ -54,11 +56,11 @@ async function login(req, res, next)
     console.log(`MATCH FOUND: ${match}`)
     if (!match) throw new Error();
     
-    res.json(createJWT(user));
+    res.status(200).res.json(createJWT(user));
     next();
   } catch (error)
   {
-    console.log("ERROR:", error)
-    res.status(400).json("Bad Credentials");
+    console.log("ERROR:", "Bad Credentials", error);
+    res.status(400).json({ msg: error.message });
   }
 }
