@@ -1,5 +1,5 @@
 import React from 'react'
-// import {Link} from "react-router-dom";
+
 import * as userService from '../../utilities/users-service';
 import styles from "../../styles/UserLogout.module.css";
 
@@ -15,12 +15,6 @@ function UserLogOut(props)
     setUser(null);
   }
   
-  // return (
-  //   <>
-  //     <Link to="" onClick={handleLogOut}><button>Logout</button></Link>
-  //   </>
-  // );
-  
   return (
     <div className={styles.UserLogOut}>
       <div>{user.name}</div>
@@ -28,7 +22,6 @@ function UserLogOut(props)
       <button className="btn-sm" onClick={handleLogOut}>LOG OUT</button>
     </div>
   );
-  
 }
 
 export default UserLogOut;

@@ -9,6 +9,7 @@ import OrdersList from '../../components/OrdersList/OrdersList';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
 
 import styles from "../../styles/OrderHistoryPage.module.css";
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 function OrderHistoryPage(props)
 {
@@ -37,23 +38,19 @@ function OrderHistoryPage(props)
   // return (
   //   <>
   //     <h1> OrderHistory Page</h1>
-  //     <button onClick={handleCheckToken}>Check Login Expiration</button>
   //   </>
   // );
   
   return (
     <main className={styles.OrderHistoryPage}>
-      <aside className={styles.aside}>
-        <Logo />
+      <Sidebar user={user} setUser={setUser} >
         <Link to="/orders/new" className="button btn-sm">NEW ORDER</Link>
-        <UserLogOut user={user} setUser={setUser} />
-      </aside>
+      </Sidebar>
       <OrdersList
         orders={orders}
         activeOrder={activeOrder}
         handleSelectOrder={handleSelectOrder}
       />
-      
       <OrderDetail order={activeOrder} />
     </main>
   );
