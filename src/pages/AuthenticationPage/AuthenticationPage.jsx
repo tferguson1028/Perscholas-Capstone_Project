@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import LoginForm from '../../components/Forms/LoginForm/LoginForm';
 import SignUpForm from '../../components/Forms/SignUpForm/SignUpForm';
 
-import styles from "./AuthenticationPage.modules.css";
+import styles from "./AuthenticationPage.module.css";
 
 function AuthenticationPage(props)
 {
