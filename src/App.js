@@ -9,24 +9,24 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 
 function App()
 {
-  const [user, setUser] = useState(getUser());
-  
+  const [ user, setUser ] = useState(getUser());
+
   return (
     <div className="App">
       {
         user ? (
-        <>
-          <>{/* Might use nav component */}</>
-          <main>
+          <>
+            <>{/* Might use nav component */}</>
             <Routes>
               <Route index element={<HomePage user={user} setUser={setUser} />} />
-              <Route path="/page_not_found" element={<ErrorPage error={404} message={"Page not found"}/>} />              <Route path="/*" element={<Navigate to="/orders/new" />} /> {/* Reroute */}
+              <Route path="/page_not_found" element={<ErrorPage error={404} message={"Page not found"} />} />
+              <Route path="/*" element={<Navigate to="/page_not_found" />} /> {/* Reroute */}
             </Routes>
-          </main>
-        </>
-      ) : (
-        <AuthenticationPage user={user} setUser={setUser} />
-      )}
+          </>
+        ) : (
+          <AuthenticationPage user={user} setUser={setUser} />
+        )}
+      <footer className="page-footer"></footer>
     </div>
   );
 }
