@@ -19,8 +19,8 @@ function AuthenticationPage(props)
       </header>
       <section className="auth-page-main">
         <div className='auth-page-auth-select'>
-          <button onClick={() => { setShowLogin(true); }}>Sign Up</button>
-          <button onClick={() => { setShowLogin(false); }}>Login</button>
+          <button onClick={() => { setShowLogin(false); }}>Sign Up</button>
+          <button onClick={() => { setShowLogin(true); }}>Login</button>
         </div>
         {showLogin ? <LoginForm setUser /> : <SignUpForm setUser />}
       </section>
