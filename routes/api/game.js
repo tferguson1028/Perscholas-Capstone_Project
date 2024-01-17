@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const gameController = require('../../controllers/api/users');
+const gameController = require('../../controllers/api/game');
 
 // Base Route: /api/game
 

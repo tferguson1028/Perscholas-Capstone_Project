@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const response = require("./response");
 
 module.exports = { create, login, checkToken };
+
 function create(req, res) { response.respond(req, res, createDispatch); }
 function login(req, res) { response.respond(req, res, loginDispatch); }
 
