@@ -1,4 +1,5 @@
 const response = require("./response");
+const Room = require("../../models/room");
 
 //* Exported Methods
 module.exports = { create, join };
