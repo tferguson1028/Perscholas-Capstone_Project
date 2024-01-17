@@ -1,0 +1,18 @@
+:root
+{
+  --color-mono-beige: #e2c290;
+
+  --color-mono-0:    #FFFFFA;
+  --color-mono-50:   #FCFCFD;
+  --color-mono-100:  #FCFCFD;
+  --color-mono-200:  #F7F7F8;
+  --color-mono-300:  #CDCFD6;
+  --color-mono-400:  #9A9EAC;
+  --color-mono-500:  #40434E;
+  --color-mono-600:  #3C3F49;
+  --color-mono-700:  #2E3038;
+  --color-mono-800:  #25272D;
+  --color-mono-900:  #191A1F;
+  --color-mono-950:  #191A1F;
+  --color-mono-1000: #080705;
+}
