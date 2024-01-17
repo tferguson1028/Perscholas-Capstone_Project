@@ -42,12 +42,13 @@ export default function LoginForm(props)
         <form autoComplete="off">
           <label htmlFor="email">Email</label>
           <input
-            type="text"
+            type="email"
+            id="email"
             name="email"
             value={credentials.email} onChange={handleChange} required
           />
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" value={credentials.password} onChange={handleChange} required />
+          <input type="password" id="password" name="password" value={credentials.password} onChange={handleChange} required />
           <button type="submit">LOG IN</button>
         </form>
       </div>

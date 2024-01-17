@@ -62,6 +62,7 @@ export default class SignUpForm extends Component
             <label htmlFor="name">Username</label>
             <input
               type="text"
+              id="name"
               name="name"
               value={this.state.name}
               onChange={this.handleChange}
@@ -70,6 +71,7 @@ export default class SignUpForm extends Component
             <label htmlFor="email">Email</label>
             <input
               type="email"
+              id="email"
               name="email"
               value={this.state.email}
               onChange={this.handleChange}
@@ -78,6 +80,7 @@ export default class SignUpForm extends Component
             <label htmlFor="password">Password</label>
             <input
               type="password"
+              id="password"
               name="password"
               value={this.state.password}
               onChange={this.handleChange}
@@ -86,6 +89,7 @@ export default class SignUpForm extends Component
             <label htmlFor="confirm">Confirm Password</label>
             <input
               type="password"
+              id="confirm"
               name="confirm"
               value={this.state.confirm}
               onChange={this.handleChange}
