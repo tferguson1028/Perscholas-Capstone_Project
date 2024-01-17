@@ -7,5 +7,6 @@ const ensureLoggedIn = require('../../config/ensureLoggedIn');
 
 router.post("/create", ensureLoggedIn, roomsController.create);
 router.post("/join/:roomID", ensureLoggedIn, roomsController.join);
+router.post("/leave/:roomID", ensureLoggedIn, roomsController.leave);
 
 module.exports = router;

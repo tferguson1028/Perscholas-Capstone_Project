@@ -12,7 +12,7 @@ function GameRoom(props)
         <h1>Room {room}</h1>
       </header>
       <GameVisuals />
-      <GameControls setRoom={setRoom} />
+      <GameControls user={user} room={room} setRoom={setRoom} />
     </main>
   );
 }

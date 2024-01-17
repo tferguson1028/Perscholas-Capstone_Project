@@ -11,3 +11,9 @@ export async function joinRoom(roomID, userData)
   const data = await roomAPI.joinRoom(roomID, userData);
   return data;
 }
+
+export async function leaveRoom(roomID, userData) 
+{ 
+  const status = await roomAPI.leaveRoom(roomID, userData);
+  return status;
+}
