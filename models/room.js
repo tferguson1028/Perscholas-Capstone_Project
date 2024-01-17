@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const roomSchema = new Schema(
-{
-  roomID: { type: String, required: true },
-  deckID: { type: String, required: false },
-  connectedUserIDs:  [String]
-}, {
+  {
+    deckID: { type: String, required: true },
+    connectedUserIDs: [ { type: String, required: true } ],
+    turnQueue: [ { type: String, required: true } ]
+  }, {
   timestamps: true
 });
 
