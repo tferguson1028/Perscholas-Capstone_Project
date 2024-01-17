@@ -20,10 +20,10 @@ const cardsAPI = {
   addToPlayerHand: (deckID, playerID, cardAbbr) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/add/${cardAbbr}`); },
   viewPlayerHand: (deckID, playerID) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/list`); },
   drawFromPlayerHand: (deckID, count = 1) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${pile}/draw/?count=${count}`); },
-  returnPlayerHandToDeck: (deckID, playerID) => { getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/return`); }
+  returnPlayerHandToDeck: (deckID, playerID) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/return`); }
 };
 
-module.exports = { cardsAPI };
+module.exports = cardsAPI;
 
 //* Internal Functions
 async function getAPIData(request)
@@ -39,6 +39,6 @@ async function getAPIData(request)
   } catch(exception)
   {
     console.error("Error occurred while fetching.\n" + exception);
-    return undefined;
+    return {};
   }
 }

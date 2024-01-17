@@ -1,8 +1,9 @@
 const response = require("./response");
 const Room = require("../../models/room");
+const cardsAPI = require("./cardsFetchAPI");
 
-// TODO: Check all rooms on the database and if they are expired delete them.
-
+// Clear all rooms on server start
+// Room.deleteMany({});
 
 //* Exported Methods
 module.exports = { create, join };
@@ -11,23 +12,39 @@ function join(req, res) { return response.respond(req, res, joinRoomDispatch); }
 
 
 //* Internal Methods
-function createNewRoomDispatch(req)
+async function createNewRoomDispatch(req)
 {
   console.log(`Created new room with ID: ${404}`);
   
-  // TODO: Create a room on the database using the schema. Add a timeout function that will delete the room after 20 minutes.
-  
-  return "Room created";
+  const gameDeck = await cardsAPI.newDeck();
+  console.log(gameDeck);
+  const room = await Room.create(newRoom(gameDeck));
+  return room;
 }
 
-function joinRoomDispatch(req)
+async function joinRoomDispatch(req)
 {
   // TODO: Update the DB with the user information and respond with a room id
-
-  return "TestJoin";
+  
+  const room = await Room.findOne({deckID: req.params["roomID"]});
+  console.log(req.params.roomID);
+  console.log(room);
+  if(room)
+    return room.deckID;
+  return null;
 }
 
 function deleteRoom(roomID)
 {
   
+}
+
+function newRoom(cardAPIData)
+{
+  return (
+  {
+    deckID: cardAPIData.deck_id,
+    connectedUserIDs: [],
+    turnQueue: []
+  });
 }

@@ -32,7 +32,7 @@ function HomePage(props)
   {
     event.preventDefault();
     
-    const roomID = await roomService.joinRoom(user);
+    const roomID = await roomService.joinRoom(joinID, user);
     setRoom(roomID);
   }
   
@@ -45,7 +45,7 @@ function HomePage(props)
         <button onClick={handleRoomCreate}>Create Room</button>
         <form onSubmit={handleRoomJoin}>
           <button type="submit">Join Room</button>
-          <input type="text" name="room" id="room" />
+          <input type="text" name="room" id="room" onChange={handleChange} />
         </form>
         <button onClick={handleLogOut}>LOG OUT</button>
       </section>
