@@ -10,7 +10,7 @@ import GameRoom from "./pages/GameRoom/GameRoom.jsx";
 function App()
 {
   const [ user, setUser ] = useState(getUser());
-  const [ room, setRoom ] = useState(null);
+  const [ room, setRoom ] = useState();
 
   return (
     <div className="App">
@@ -22,10 +22,13 @@ function App()
             <Routes>
               {
                 room ?
-                <Route index element={<Navigate to={`/room/${room}`} />} /> :
-                <Route index element={<HomePage user={user} setUser={setUser} setRoom={setRoom} />} />
+                  <>
+                    <Route index element={<Navigate to={`/room/${room}`} />} />
+                    <Route path={`/room/*`} element={<GameRoom user={user} room={room} setRoom={setRoom} />} />
+                  </>
+                  :
+                  <Route index element={<HomePage user={user} setUser={setUser} setRoom={setRoom} />} />
               }
-              <Route path={`/room/*`} element={<GameRoom user={user} room={room} setRoom={setRoom} />} />
               <Route path="/page_not_found" element={<ErrorPage errorCode={404} errorMessage={"Page not found"} />} />
               <Route path="/*" element={<Navigate to="/page_not_found" />} /> {/* Reroute */}
             </Routes>
