@@ -34,7 +34,7 @@ async function create(req, res)
     let token = createJWT(user);
     console.log(`User : ${req.body}, Token: ${token}`);
     
-    respond(token);
+    respond(res, token);
   } catch (error)
   {
     console.log("ERROR:", error);

@@ -22,7 +22,7 @@ function AuthenticationPage(props)
           <button onClick={() => { setShowLogin(false); }}>Sign Up</button>
           <button onClick={() => { setShowLogin(true); }}>Login</button>
         </div>
-        {showLogin ? <LoginForm setUser /> : <SignUpForm setUser />}
+        {showLogin ? <LoginForm setUser={setUser} /> : <SignUpForm setUser={setUser} />}
       </section>
     </main>
   );
