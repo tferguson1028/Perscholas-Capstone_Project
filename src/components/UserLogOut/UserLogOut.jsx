@@ -1,12 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 import * as userService from '../../utilities/users-service';
-import styles from "../../styles/UserLogout.module.css";
 
 function UserLogOut(props)
 {
   const { user = {}, setUser = () => {} } = props;
-  
+
   function handleLogOut() 
   {
     // Delegate to the users-service
@@ -14,13 +13,12 @@ function UserLogOut(props)
     userService.logOut();
     setUser(null);
   }
-  
+
   return (
-    <div className={styles.UserLogOut}>
+    <button onClick={handleLogOut}>
       <div>{user.name}</div>
-      <div className={styles.email}>{user.email}</div>
-      <button className="btn-sm" onClick={handleLogOut}>LOG OUT</button>
-    </div>
+      {props.children}
+    </button>
   );
 }
 
