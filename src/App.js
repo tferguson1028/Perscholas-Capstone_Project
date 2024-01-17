@@ -17,6 +17,7 @@ function App()
       {
         user ? (
           <>
+            <nav>Testing stuff</nav>
             <>{/* Might use nav component */}</>
             <Routes>
               <Route index element={<HomePage user={user} setUser={setUser} />} />
@@ -25,7 +26,10 @@ function App()
             </Routes>
           </>
         ) : (
-          <AuthenticationPage user={user} setUser={setUser} />
+          <Routes>
+            <Route index element={<AuthenticationPage user={user} setUser={setUser} />} />
+            <Route path="/*" element={<Navigate to="/" />} /> {/* Reroute */}
+          </Routes>
         )}
       <footer className="page-footer"></footer>
     </div>
