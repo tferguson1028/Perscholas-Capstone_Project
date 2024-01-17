@@ -1,10 +1,9 @@
 import React from 'react'
-import styles from "../../styles/Logo.module.css"
 
 function Logo()
 {
   return (
-    <div className={styles.Logo}>
+    <div>
       <div>SEI</div>
       <div>CAFE</div>
     </div>
