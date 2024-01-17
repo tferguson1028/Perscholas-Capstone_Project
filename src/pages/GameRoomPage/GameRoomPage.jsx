@@ -4,7 +4,7 @@ import GameControls from '../../components/Game/GameControls/GameControls';
 
 function GameRoom(props) 
 {
-  const { room, user, setUser } = props;
+  const { user, room, setRoom } = props;
 
   return (
     <main>
@@ -12,7 +12,7 @@ function GameRoom(props)
         <h1>Room {room}</h1>
       </header>
       <GameVisuals />
-      <GameControls />
+      <GameControls setRoom={setRoom} />
     </main>
   );
 }

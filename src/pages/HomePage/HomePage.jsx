@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import * as userService from "../../utilities/users-service";
+import * as roomService from "../../utilities/room-service";
 
 function HomePage(props)
 {
   const { user = {}, setUser = () => {}, setRoom = () => {} } = props;
+  const [ joinID, setJoinID ] = useState();
   
   function handleLogOut() 
   {
@@ -14,23 +16,39 @@ function HomePage(props)
     setUser(null);
   }
   
-  function handleCreate(event)
+  function handleChange(event)
   {
+    event.preventDefault();
+    setJoinID(event.target.value);
   }
   
-  function handleJoin(event)
+  async function handleRoomCreate()
   {
+    const roomID = await roomService.createRoom(user);
+    setRoom(roomID);
+  }
+  
+  async function handleRoomJoin(event)
+  {
+    event.preventDefault();
+    
+    const roomID = await roomService.joinRoom(user);
+    setRoom(roomID);
   }
   
   return (
     <main>
       <div>HomePage</div>
-      <button onClick={handleCreate}>Create Room</button>
-      <form onSubmit={handleJoin}>
-        <button type="submit">Join Room</button>
-        <input type="text" name="room" id="room" />
-      </form>
-      <button onClick={handleLogOut}>LOG OUT</button>
+      <section>
+      </section>
+      <section>
+        <button onClick={handleRoomCreate}>Create Room</button>
+        <form onSubmit={handleRoomJoin}>
+          <button type="submit">Join Room</button>
+          <input type="text" name="room" id="room" />
+        </form>
+        <button onClick={handleLogOut}>LOG OUT</button>
+      </section>
     </main>
   );
 }

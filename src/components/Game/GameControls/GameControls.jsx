@@ -1,8 +1,8 @@
 import React from 'react';
 
-function GameControls() 
+function GameControls(props)
 {
-  
+  const { setRoom } = props;
 
   return (
     <div>
@@ -10,6 +10,7 @@ function GameControls()
       <button>Check</button>
       <button>Raise</button>
       <button>Fold</button>
+      <button onClick={() => { setRoom(null); }}>Leave</button>
     </div>
   );
 }

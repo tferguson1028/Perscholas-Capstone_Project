@@ -5,7 +5,7 @@ const ensureLoggedIn = require('../../config/ensureLoggedIn');
 
 // Base Route: /api/rooms
 
-router.get("/create", ensureLoggedIn, roomsController.create);
+router.post("/create", ensureLoggedIn, roomsController.create);
 router.post("/join/:roomID", ensureLoggedIn, roomsController.join);
 
 module.exports = router;

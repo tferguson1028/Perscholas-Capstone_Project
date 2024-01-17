@@ -29,6 +29,7 @@ function App()
                   :
                   <Route index element={<HomePage user={user} setUser={setUser} setRoom={setRoom} />} />
               }
+              <Route path="/room/*" element={<Navigate to="/" />} />
               <Route path="/page_not_found" element={<ErrorPage errorCode={404} errorMessage={"Page not found"} />} />
               <Route path="/*" element={<Navigate to="/page_not_found" />} /> {/* Reroute */}
             </Routes>
