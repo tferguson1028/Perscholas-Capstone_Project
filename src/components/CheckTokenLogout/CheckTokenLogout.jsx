@@ -1,8 +1,6 @@
 import React from 'react'
 import * as usersService from "../../utilities/users-service";
 
-import styles from "../../styles/UserLogout.module.css";
-
 function CheckTokenLogout()
 {
   async function handleCheckToken()
@@ -12,7 +10,7 @@ function CheckTokenLogout()
   }
 
   return (
-    <div className={styles.UserLogOut}>
+    <div>
       <button className="btn-sm" onClick={handleCheckToken}>Check Login Expiration</button>
     </div>
   );

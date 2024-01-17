@@ -1,4 +1,3 @@
-import "./App.css";
 import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { getUser } from "./utilities/users-service";
@@ -6,7 +5,6 @@ import { getUser } from "./utilities/users-service";
 import AuthenticationPage from "./pages/AuthenticationPage/AuthenticationPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
-
 
 function App()
 {
