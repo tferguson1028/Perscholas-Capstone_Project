@@ -1,11 +1,11 @@
 import React from 'react';
 
-import * as userService from '../../utilities/users-service';
+import * as userService from "../../utilities/users-service";
 
-function UserLogOut(props)
+function HomePage(props)
 {
   const { user = {}, setUser = () => {} } = props;
-
+  
   function handleLogOut() 
   {
     // Delegate to the users-service
@@ -13,13 +13,13 @@ function UserLogOut(props)
     userService.logOut();
     setUser(null);
   }
-
+  
   return (
-    <button onClick={handleLogOut}>
-      <div>{user.name}</div>
-      {props.children}
-    </button>
+    <main>
+      <div>HomePage</div>
+      <button onClick={handleLogOut}>LOG OUT</button>
+    </main>
   );
 }
 
-export default UserLogOut;
+export default HomePage;

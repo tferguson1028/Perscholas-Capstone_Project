@@ -1,33 +1,35 @@
-import logo from "./logo.svg";
-import "./App.css";
-import {useState} from "react";
-import {Routes, Route, Navigate} from "react-router-dom";
-import {getUser} from "./utilities/users-service";
-import NewOrderPage from "./pages/NewOrderPage/NewOrderPage.jsx";
-import AuthPage from "./pages/AuthPage/AuthPage.jsx";
-import OrderHistoryPage from "./pages/OrderHistoryPage/OrderHistoryPage.jsx";
-import Navbar from "./components/Navbar";
+import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { getUser } from "./utilities/users-service";
 
+import AuthenticationPage from "./pages/AuthenticationPage/AuthenticationPage.jsx";
+import HomePage from "./pages/HomePage/HomePage.jsx";
+import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
 
 function App()
 {
-  const [user, setUser] = useState(getUser());
-  
+  const [ user, setUser ] = useState(getUser());
+
   return (
     <div className="App">
-
-      {user ? (
-        <>
-          <Navbar user={user} setUser={setUser} />
+      {
+        user ? (
+          <>
+            <nav>Testing stuff</nav>
+            <>{/* Might use nav component */}</>
+            <Routes>
+              <Route index element={<HomePage user={user} setUser={setUser} />} />
+              <Route path="/page_not_found" element={<ErrorPage errorCode={404} errorMessage={"Page not found"} />} />
+              <Route path="/*" element={<Navigate to="/page_not_found" />} /> {/* Reroute */}
+            </Routes>
+          </>
+        ) : (
           <Routes>
-            <Route path="/orders/new" element={<NewOrderPage user={user} setUser={setUser} />} />
-            <Route path="/orders" element={<OrderHistoryPage user={user} setUser={setUser} />} />
-            <Route path="/*" element={<Navigate to="/orders/new" />} /> {/* Reroute */}
+            <Route index element={<AuthenticationPage user={user} setUser={setUser} />} />
+            <Route path="/*" element={<Navigate to="/" />} /> {/* Reroute */}
           </Routes>
-        </>
-      ) : (
-        <AuthPage user={user} setUser={setUser} />
-      )}
+        )}
+      <footer className="page-footer"></footer>
     </div>
   );
 }
