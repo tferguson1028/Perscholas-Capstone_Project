@@ -1,13 +1,33 @@
-
 const response = require("./response");
 
 //* Exported Methods
-module.exports = {};
-function checkTurn(req, res) { response.respond(req, res, checkTurnDispatch); }
+module.exports = { doAction, getUpdate };
+function doAction(req, res) { response.respond(req, res, playerActionDispatch); }
+function getUpdate(req, res) { response.respond(req, res, getUpdateDispatch); }
 
-//* Internal Methods
-function checkTurnDispatch(userID, gameID)
+//* Dispatch Methods
+function getUpdateDispatch(req)
 {
-  return new Error("TODO");
+
 }
 
+function playerActionDispatch(req)
+{
+
+}
+
+//* Internal Methods
+function startGame(roomID)
+{
+
+}
+
+function checkPlayerTurn(userID, roomID)
+{
+
+}
+
+function updateGameState(roomID)
+{
+
+}

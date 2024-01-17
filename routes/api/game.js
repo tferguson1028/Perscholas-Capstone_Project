@@ -4,6 +4,5 @@ const gameController = require('../../controllers/api/game');
 
 // Base Route: /api/game
 
-// 
-router.get("/check_turn", gameController.functionName);
-router.post("/action/:gameID/:userID", gameController.functionName);
+router.get("/update/:roomID", gameController.getUpdate);
+router.post("/action/:roomID/:userID", gameController.doAction);
