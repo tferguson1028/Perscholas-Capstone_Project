@@ -6,6 +6,7 @@ import AuthenticationPage from "./pages/AuthenticationPage/AuthenticationPage.js
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
 import RoomPage from "./pages/RoomPage/RoomPage.jsx";
+import GamePage from "./pages/GamePage/GamePage.jsx";
 
 function App()
 {
@@ -24,12 +25,14 @@ function App()
                 room ?
                   <>
                     <Route path={`/room/*`} element={<RoomPage user={user} room={room} setRoom={setRoom} />} />
+                    <Route path={`/game/*`} element={<GamePage user={user} room={room} setRoom={setRoom} />} />
                     <Route path="/*" element={<Navigate to={`/room/${room}`} />} />
                   </>
                   :
                   <Route index element={<HomePage user={user} setUser={setUser} setRoom={setRoom} />} />
               }
               <Route path="/room/*" element={<Navigate to="/" />} />
+              <Route path="/game/*" element={<Navigate to="/" />} />
               <Route path="/page_not_found" element={<ErrorPage errorCode={404} errorMessage={"Page not found"} />} />
               <Route path="/*" element={<Navigate to="/page_not_found" />} /> {/* Reroute */}
             </Routes>
