@@ -1,57 +1,49 @@
 .Logo {
-  height: 60vmin;
+  /* height: max-content; */
+  height: 128px;
 
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
+
+  /* gap: 64px; */
 }
 
 .Logo * {
   display: flex;
-  height: 50%;
-  width: 100%;
-
   align-items: center;
   justify-content: center;
 }
 
+
+.Logo,
+.Logo * {
+  border: 1px solid black;
+}
+
 .Logo > .logo-image {
-  flex: 9;
-  margin-top: 8vmin;
+  width: 128px;
+  top: 15%; /* Strange offset */
 }
 
 .Logo > h1 {
-  flex: 1;
+  /* flex: 1; */
   margin: 0;
   padding: 0;
 
-  font-size: 7vmin;
-}
-
-@media screen and (max-width: 664px) {
-  .Logo {
-    flex-direction: row;
-  }
-
-  .Logo .logo-image {
-    margin-top: 0;
-    flex: 1;
-  }
+  font-size: 22pt;
 }
 
 .Logo .logo-suit {
   position: absolute;
-  top: 200px;
-
-  width: 16vmin;
-  height: 16vmin;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 12vmin;
+  font-size: 24pt;
+  width: 1.4em;
+  height: 1.4em;
 }
 
 .Logo .logo-suit:nth-child(1) {
@@ -88,7 +80,7 @@
   transform-origin: center;
   transform: rotate(45deg);
 
-  border-radius: 2vmin;
+  border-radius: 0.5rem;
   width: 100%;
   height: 100%;
   z-index: -1;
