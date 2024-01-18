@@ -23,7 +23,7 @@ function AuthenticationPage(props)
         </header>
         <div className={styles.authSelect}>
           <button
-            className={showLogin ? styles.buttonOn : styles.buttonOff}
+            className={!showLogin ? styles.buttonOn : styles.buttonOff}
             onClick={() => { setShowLogin(false); }}>
             Sign Up
           </button>

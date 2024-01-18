@@ -5,6 +5,8 @@
 *:after {
   box-sizing: border-box;
   position: relative;
+  
+  transition: 0.15s;
 }
 
 html,
@@ -33,6 +35,8 @@ main {
 
 main * {
   border-radius: 0.4rem;
+  
+  /* https://css-tricks.com/how-do-you-do-max-font-size-in-css/ */
   font-size: clamp(12pt, 2.5vmin, 16pt);
 }
 

@@ -25,16 +25,37 @@
   font-size: 32pt;
 }
 
-.AuthenticationPage .mainSection 
-{
+.AuthenticationPage .mainSection {
   padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  
+  gap: 24px;
 }
 
+.AuthenticationPage .authSelect {
+  width: 50%;
+  align-self: center;
+  display: flex;
 
-.authSelect > * {
+  overflow: hidden;
+}
+
+.AuthenticationPage .authSelect > * {
   margin: 0;
+  flex: 1;
+  border-radius: 0;
+  border: 0;
 }
 
-.buttonOn {}
+.buttonOn {
+  background-color: var(--color-system-error);
+  z-index: 2;
+  box-shadow: 0px 0px 0px 2px var(--color-primary-vibrant-800);
+}
 
-.buttonOff {}
+.buttonOff {
+  background-color: var(--color-primary-vibrant-200);
+  z-index: 1;
+}

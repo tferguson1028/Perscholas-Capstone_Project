@@ -1,16 +1,26 @@
 .Form
 {
-
   display: flex;
   flex-direction: column;
-  /* border: 1px solid black; */
+  /* border: 6px solid var(--color-primary-200); */
+  padding: 32px;
+  
+  background-color: var(--color-primary-200);
+  /* box-shadow: 0 0 2px 2px var(--color-primary-200); */
 }
 
 .Form > div > form
 {
   display: flex;
   flex-direction: column;
-  /* background-color: aliceblue; */
+  
+  font-weight: bold;
+}
+
+
+.Form > div > form input
+{
+  margin-bottom: 18px;
 }
 
 .Form header { display: none; }
