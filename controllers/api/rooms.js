@@ -6,10 +6,11 @@ const cardsAPI = require("./cardsFetchAPI");
 // Room.deleteMany({});
 
 //* Exported Methods
-module.exports = { create, join, leave };
+module.exports = { create, join, leave, start };
 function create(req, res) { return response.respond(req, res, createNewRoomDispatch); }
 function join(req, res) { return response.respond(req, res, joinRoomDispatch); }
 function leave(req, res) { return response.respond(req, res, leaveRoomDispatch); }
+function start(req, res) { return response.respond(req, res, startGameDispatch); }
 
 
 //* Internal Methods
@@ -27,24 +28,24 @@ async function joinRoomDispatch(req)
 {
   // TODO: Update the DB with the user information and respond with a room id
 
-  const roomID = req.params[ "roomID" ];
+  const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
 
   const usersArr = room.connectedUserIDs;
-  usersArr.push(req.body._id);
+  if(usersArr.indexOf(req.body._id) === -1)
+    usersArr.push(req.body._id);
 
   const updatedRoom = await Room.updateOne({ _id: room._id }, { connectedUserIDs: usersArr });
   console.log(room);
   console.log(updatedRoom);
   if(updatedRoom.acknowledged && updatedRoom.modifiedCount >= 1)
     return room.deckID;
-
   return null;
 }
 
 async function leaveRoomDispatch(req)
 {
-  const roomID = req.params[ "roomID" ];
+  const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
 
   const usersArr = room.connectedUserIDs;
@@ -55,6 +56,21 @@ async function leaveRoomDispatch(req)
   console.log(updatedRoom);
   if(updatedRoom.acknowledged && updatedRoom.modifiedCount >= 1)
     return true;
+  return null;
+}
+
+async function startGameDispatch(req)
+{
+  const roomID = req.params["roomID"];
+  const room = await Room.findOne({ deckID: roomID });
+  const usersArr = room.connectedUserIDs;
+  
+  if(usersArr.indexOf(req.body._id) === -1)
+    return false;
+  
+  const turnQueue = shuffleArray(usersArr);
+  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
+  
 
   return null;
 }
@@ -62,6 +78,20 @@ async function leaveRoomDispatch(req)
 function deleteRoom(roomID)
 {
 
+}
+
+function shuffleArray(arr = [])
+{
+  let arrClone = [...arr]; //Clone array
+  let newArr = [];
+  
+  while(arrClone.length > 0)
+  {
+    let index = Math.floor(Math.random() * arrClone.length);
+    newArr.push(arrClone.splice(index, 1));
+  }
+  
+  return newArr.flat();
 }
 
 function newRoom(cardAPIData)

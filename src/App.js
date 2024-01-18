@@ -5,7 +5,7 @@ import { getUser } from "./utilities/users-service";
 import AuthenticationPage from "./pages/AuthenticationPage/AuthenticationPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
-import GameRoom from "./pages/GameRoomPage/GameRoomPage.jsx";
+import RoomPage from "./pages/RoomPage/RoomPage.jsx";
 
 function App()
 {
@@ -23,7 +23,7 @@ function App()
               {
                 room ?
                   <>
-                    <Route path={`/room/*`} element={<GameRoom user={user} room={room} setRoom={setRoom} />} />
+                    <Route path={`/room/*`} element={<RoomPage user={user} room={room} setRoom={setRoom} />} />
                     <Route path="/*" element={<Navigate to={`/room/${room}`} />} />
                   </>
                   :

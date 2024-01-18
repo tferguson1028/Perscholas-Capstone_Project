@@ -25,6 +25,7 @@ function HomePage(props)
   async function handleRoomCreate()
   {
     const roomID = await roomService.createRoom(user);
+    console.log(roomID);
     setRoom(roomID);
   }
   
