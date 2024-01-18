@@ -4,7 +4,11 @@ const gameController = require('../../controllers/api/game');
 
 // Base Route: /api/game
 
-router.get("/update/:roomID", gameController.getUpdate);
+// POST
 router.post("/action/:roomID/:userID", gameController.doAction);
+
+// GET Routes
+router.get("/update/:roomID", gameController.getUpdate);
+router.get("/update/:roomID/await", gameController.awaitUpdate);
 
 module.exports = router;

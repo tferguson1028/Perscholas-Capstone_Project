@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { getUser } from "./utilities/users-service";
 
@@ -10,8 +10,10 @@ import GamePage from "./pages/GamePage/GamePage.jsx";
 
 function App()
 {
-  const [ user, setUser ] = useState(getUser());
-  const [ room, setRoom ] = useState();
+  const [user, setUser] = useState(getUser());
+  const [room, setRoom] = useState();
+
+  useEffect(() => {}, [room, user]);
 
   return (
     <div className="App">
