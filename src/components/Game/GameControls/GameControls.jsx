@@ -18,8 +18,8 @@ function GameControls(props)
 
   async function doAction(actionPayload)
   {
-    const response = gameService.sendAction(room, user, actionPayload);
-    response ? setError("Wait your turn") : setError("");
+    const response = await gameService.sendAction(room, user, actionPayload);
+    response ? setError("") : setError("Wait your turn");
   }
 
   return (
