@@ -9,6 +9,9 @@ import RoomPage from "./pages/RoomPage/RoomPage.jsx";
 import GamePage from "./pages/GamePage/GamePage.jsx";
 import Logo from "./components/Logo/Logo.jsx";
 
+// General Styling
+import "./styles/inputs.css";
+
 function App()
 {
   const [user, setUser] = useState(getUser());

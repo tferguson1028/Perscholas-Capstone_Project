@@ -1,0 +1,21 @@
+button, input, textarea
+{
+  margin: 8px 4px;
+  padding: 8px;
+  
+  border-radius: 1vmin;
+  
+  /* https://css-tricks.com/how-do-you-do-max-font-size-in-css/ */
+  font-size: clamp(12pt, 4vmin, 16pt);
+}
+
+button
+{
+    
+}
+
+input
+{
+  color: var(--color-mono-0);
+  background-color: var(--color-background-900);
+}
