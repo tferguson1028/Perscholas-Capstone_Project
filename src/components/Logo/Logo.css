@@ -1,0 +1,86 @@
+.Logo {
+  /* width: 50%; */
+  height: 60vmin;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Logo > .logo-image {
+  flex: 9;
+  left: -16vmin;
+}
+
+.Logo > h1 {
+  flex: 1;
+  margin: 0;
+  margin-top: 8vmin;
+  padding: 0;
+
+  font-size: 7vmin;
+}
+
+@media screen and (max-width: 664px) {
+  .Logo {
+    flex-direction: row;
+  }
+
+  .Logo .logo-image {
+    flex: 1.5;
+    left: 8vmin;
+    top: -16vmin;
+  }
+}
+
+.Logo .logo-suit {
+  position: absolute;
+  left: 0;
+  top: 200px;
+
+  font-size: 12vmin;
+}
+
+.Logo .logo-suit:nth-child(1) {
+  top: 0;
+  left: 12vmin;
+}
+
+.Logo .logo-suit:nth-child(2) {
+  top: 12vmin;
+  left: 0vmin;
+}
+
+.Logo .logo-suit:nth-child(3) {
+  top: 24vmin;
+  left: 12vmin;
+}
+
+.Logo .logo-suit:nth-child(4) {
+  top: 12vmin;
+  left: 24vmin;
+}
+
+.Logo .logo-suit::before {
+  content: "";
+  position: absolute;
+  transform-origin: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+
+  border-radius: 2vmin;
+  width: 16vmin;
+  height: 16vmin;
+  z-index: -1;
+}
+
+.Logo .logo-suit:nth-child(odd)::before {
+  background-color: var(--color-primary-vibrant-700);
+}
+
+.Logo .logo-suit:nth-child(even)::before {
+  background-color: var(--color-primary-vibrant-100);
+}

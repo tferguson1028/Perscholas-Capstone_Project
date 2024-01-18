@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
 import RoomPage from "./pages/RoomPage/RoomPage.jsx";
 import GamePage from "./pages/GamePage/GamePage.jsx";
+import Logo from "./components/Logo/Logo.jsx";
 
 function App()
 {
@@ -17,6 +18,7 @@ function App()
 
   return (
     <div className="App">
+      <Logo />
       {
         user ? (
           <>
