@@ -20,7 +20,6 @@ export async function leaveRoom(roomID, userData)
 
 export async function startGame(roomID, userData)
 {
-  console.log(roomID);
   const status = await roomAPI.startGame(roomID, userData);
   return status;
 }

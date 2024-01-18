@@ -66,12 +66,14 @@ async function startGameDispatch(req)
   const usersArr = room.connectedUserIDs;
   
   if(usersArr.indexOf(req.body._id) === -1)
-    return false;
+    return null;
   
   const turnQueue = shuffleArray(usersArr);
   const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
   
-
+  
+  if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
+    return true;
   return null;
 }
 

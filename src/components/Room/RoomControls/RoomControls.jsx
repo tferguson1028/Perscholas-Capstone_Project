@@ -4,14 +4,17 @@ import * as roomService from "../../../utilities/room-service";
 
 function RoomControls(props)
 {
-  const { user, room, setRoom } = props;
+  const { user, room, setRoom, setError } = props;
 
   async function startGame()
   {
     const status = await roomService.startGame(room, user);
     if(status)
     {
-      
+      setError("");
+    }else
+    {
+      setError("Unable to start game");
     }
   }
 
