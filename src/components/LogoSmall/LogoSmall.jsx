@@ -3,7 +3,7 @@ import React from 'react'
 // import styles from "./Logo.module.css";
 import "./LogoSmall.css";
 
-function Logo()
+function LogoSmall()
 {
   return (
     <div className='Logo'>
@@ -18,4 +18,4 @@ function Logo()
   );
 }
 
-export default Logo;
+export default LogoSmall;
