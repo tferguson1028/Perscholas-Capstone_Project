@@ -14,12 +14,7 @@
 }
 
 .AuthenticationPage > *:not(:nth-child(1)) {
-
   width: 75%;
-}
-
-.AuthenticationPage > * {
-  /* border: 1px solid black; */
 }
 
 .introductionSection {
@@ -30,8 +25,10 @@
   font-size: 32pt;
 }
 
-
-.AuthenticationPage .mainSection {}
+.AuthenticationPage .mainSection 
+{
+  padding: 24px;
+}
 
 
 .authSelect > * {
