@@ -23,3 +23,10 @@ export async function startGame(roomID, userData)
   const status = await roomAPI.startGame(roomID, userData);
   return status;
 }
+
+export async function awaitStartGame(roomID)
+{
+  const status = await roomAPI.awaitStartGame(roomID);
+  console.log(status);
+  return status;
+}

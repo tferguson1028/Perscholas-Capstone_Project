@@ -5,9 +5,14 @@ const ensureLoggedIn = require('../../config/ensureLoggedIn');
 
 // Base Route: /api/rooms
 
+// POST Routes
 router.post("/create", ensureLoggedIn, roomsController.create);
 router.post("/join/:roomID", ensureLoggedIn, roomsController.join);
 router.post("/leave/:roomID", ensureLoggedIn, roomsController.leave);
 router.post("/start/:roomID", ensureLoggedIn, roomsController.start);
+
+// GET Routes
+router.get("/start/:roomID/await", roomsController.awaitStart);
+
 
 module.exports = router;

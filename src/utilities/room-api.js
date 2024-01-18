@@ -5,3 +5,6 @@ export async function createRoom(userData) { return sendRequest(`${BASE_URL}/cre
 export async function joinRoom(roomID, userData) { return sendRequest(`${BASE_URL}/join/${roomID}`, "POST", userData); }
 export async function leaveRoom(roomID, userData) { return sendRequest(`${BASE_URL}/leave/${roomID}`, "POST", userData); } 
 export async function startGame(roomID, userData) { return sendRequest(`${BASE_URL}/start/${roomID}`, "POST", userData); }
+
+// Awaiting Functions
+export async function awaitStartGame(roomID) { return sendRequest(`${BASE_URL}/start/${roomID}/await`); }
