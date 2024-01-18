@@ -75,8 +75,13 @@ async function startGameDispatch(req)
 
   if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
   {
+    /* 
+      Due to previous implementation, I have to return a value. 
+      false ensures the start sequence won't run twice as the processResponsePoll function
+      starts the game for all in the poll.
+    */
     processResponsePoll(roomID);
-    return false;
+    return false; 
   }
   return null;
 }
