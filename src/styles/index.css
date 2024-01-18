@@ -3,6 +3,7 @@
 *, *:before, *:after {
   box-sizing: border-box;
   position: relative;
+  border-radius: 0.2rem;
 }
 
 body {
@@ -13,6 +14,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   margin: 0;
+}
+
+main
+{
+  color: var(--color-mono-100);
+  background-color: var(--color-secondary-950);
+  padding: 24px;
+  gap: 12px;
 }
 
 code { font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }

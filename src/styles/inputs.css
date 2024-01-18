@@ -3,7 +3,7 @@ button, input, textarea
   margin: 8px 4px;
   padding: 8px;
   
-  border-radius: 1vmin;
+  border-radius: 0.2rem;
   
   /* https://css-tricks.com/how-do-you-do-max-font-size-in-css/ */
   font-size: clamp(12pt, 4vmin, 16pt);

@@ -1,0 +1,12 @@
+.AuthenticationPage
+{
+  display: flex;
+  flex-direction: column;
+  
+  align-items: center;
+}
+
+.AuthenticationPage > *
+{
+  border: 1px solid black;
+}

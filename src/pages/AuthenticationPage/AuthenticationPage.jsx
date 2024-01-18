@@ -4,6 +4,7 @@ import LoginForm from '../../components/Forms/LoginForm/LoginForm';
 import SignUpForm from '../../components/Forms/SignUpForm/SignUpForm';
 
 import styles from "./AuthenticationPage.module.css";
+import LogoSmall from '../../components/LogoSmall/LogoSmall';
 
 function AuthenticationPage(props)
 {
@@ -13,6 +14,7 @@ function AuthenticationPage(props)
 
   return (
     <main className={styles.AuthenticationPage}>
+      <LogoSmall />
       <header className="auth-page-header">
         <h1>Authentication</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, animi architecto ut ipsam et aperiam assumenda?</p>
