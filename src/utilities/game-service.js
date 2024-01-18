@@ -2,7 +2,8 @@ import * as gameAPI from "./game-api";
 
 export async function sendAction(roomID, userData, actionPayload)
 {
-  const response = await gameAPI.sendAction(roomID, userData, actionPayload);
+  const payload = { user: userData, action: actionPayload };
+  const response = await gameAPI.sendAction(roomID, payload);
   return response;
 }
 

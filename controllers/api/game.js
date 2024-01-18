@@ -16,14 +16,13 @@ function awaitUpdate(req, res) { return awaitUpdateDispatch(req, res); }
 //* Dispatch Methods
 function playerActionDispatch(req)
 {
-  const roomID = req.paras["roomID"];
+  const roomID = req.params["roomID"];
 
   if(!checkPlayerTurn(roomID, req.body["user"]._id)) return false;
 
   updateGameState(roomID, req.body["action"]);
   updateQueue(roomID);
-  
-  processResponsePoll();
+  processResponsePoll(roomID);
 
   return true;
 }
