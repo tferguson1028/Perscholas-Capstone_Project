@@ -6,7 +6,7 @@
   /* align-items: center; */
   /* justify-content: center; */
 
-  /* gap: 64px; */
+  gap: 12px;
 }
 
 .Logo * {
@@ -17,15 +17,15 @@
 
 .Logo > .logo-image {
   width: 128px;
-  top: 15%; /* Strange offset */
+  top: 15%;
+  /* Strange offset */
 }
 
 .Logo > h1 {
-  /* flex: 1; */
   margin: 0;
   padding: 0;
 
-  font-size: 22pt;
+  font-size: 28pt;
 }
 
 .Logo .logo-suit {

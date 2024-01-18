@@ -10,6 +10,7 @@ import GamePage from "./pages/GamePage/GamePage.jsx";
 
 // General Styling
 import "./styles/inputs.css";
+import "./styles/sections.css";
 
 function App()
 {

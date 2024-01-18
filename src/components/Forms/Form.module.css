@@ -1,0 +1,15 @@
+.Form
+{
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid black; */
+}
+
+.Form > div > form
+{
+  display: flex;
+  flex-direction: column;
+  /* background-color: aliceblue; */
+}
+
+.Form header { display: none; }

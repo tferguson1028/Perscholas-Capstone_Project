@@ -1,12 +1,43 @@
-.AuthenticationPage
-{
+.AuthenticationPage {
+  height: fit-content;
+
   display: flex;
   flex-direction: column;
-  
+
   align-items: center;
+
+  gap: 24px;
 }
 
-.AuthenticationPage > *
-{
-  border: 1px solid black;
+.AuthenticationPage > *:nth-child(1) {
+  color: var(--color-mono-50);
 }
+
+.AuthenticationPage > *:not(:nth-child(1)) {
+
+  width: 75%;
+}
+
+.AuthenticationPage > * {
+  /* border: 1px solid black; */
+}
+
+.introductionSection {
+  text-align: center;
+}
+
+.introductionSection > h1 {
+  font-size: 32pt;
+}
+
+
+.AuthenticationPage .mainSection {}
+
+
+.authSelect > * {
+  margin: 0;
+}
+
+.buttonOn {}
+
+.buttonOff {}
