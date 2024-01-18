@@ -81,6 +81,7 @@ async function startGameDispatch(req)
       starts the game for all in the poll.
     */
     processResponsePoll(roomID);
+    console.log(`\n*** Starting game in room ${roomID}.\n`);
     return false; 
   }
   return null;
