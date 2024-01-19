@@ -5,14 +5,14 @@
 
 const response = require("./response");
 const Room = require("../../models/room");
+const cardsAPI = require("./cardsFetchAPI");
 
 //* Exported Methods
 module.exports = { doAction, getUpdate, awaitUpdate, getCards };
 function doAction(req, res) { return response.respond(req, res, playerActionDispatch); }
 function getUpdate(req, res) { return response.respond(req, res, getUpdateDispatch); }
 function awaitUpdate(req, res) { return awaitUpdateDispatch(req, res); }
-function getCards(req, res) { return null; }
-
+function getCards(req, res) { return response.respond(req, res, getCardsDispatch); }
 
 //* Dispatch Methods
 async function playerActionDispatch(req)
@@ -36,6 +36,19 @@ async function playerActionDispatch(req)
 function getUpdateDispatch(req)
 {
   return null;
+}
+
+async function getCardsDispatch(req)
+{
+  const roomID = req.params["roomID"];
+  const userID = req.params["userID"]; // Don't peak
+  
+  const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
+  const pile = gameData["piles"][userID];
+  
+  if(pile)
+    return pile.cards;
+  return [];
 }
 
 //* Internal Methods
@@ -91,4 +104,9 @@ async function processResponsePoll(roomID)
     }
 
   responsePoll[roomID] = undefined;
+}
+
+async function dealCards()
+{
+  
 }

@@ -10,6 +10,6 @@ router.post("/action/:roomID", gameController.doAction);
 // GET Routes
 router.get("/update/:roomID", gameController.getUpdate);
 router.get("/update/:roomID/await", gameController.awaitUpdate);
-router.get("/cards/:playerID", gameController.getCards);
+router.get("/cards/:roomID/:playerID", gameController.getCards);
 
 module.exports = router;
