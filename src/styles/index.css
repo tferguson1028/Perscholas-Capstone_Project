@@ -31,6 +31,8 @@ main {
   gap: 12px;
 
   height: 100%;
+  
+  color: var(--color-mono-50);
 }
 
 main * {
