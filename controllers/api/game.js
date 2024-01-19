@@ -15,17 +15,21 @@ function getCards(req, res) { return null; }
 
 
 //* Dispatch Methods
-function playerActionDispatch(req)
+async function playerActionDispatch(req)
 {
   const roomID = req.params["roomID"];
+  const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
+  console.log("Player's turn?: ", playerTurn);
+  
+  if(!playerTurn) return false;
 
-  if(!checkPlayerTurn(roomID, req.body["user"]._id)) return false;
-
-  updateGameState(roomID, req.body["action"]);
+  let response = updateGameState(roomID, req.body["action"]);
   updateQueue(roomID);
   processResponsePoll(roomID);
+  
+  console.log("Response_dispatch: ", response);
 
-  return true;
+  return response;
 }
 
 function getUpdateDispatch(req)
@@ -38,7 +42,12 @@ async function checkPlayerTurn(roomID, userID)
 {
   const room = await Room.findOne({ deckID: roomID });
   const turnQueue = room.turnQueue;
-  return turnQueue[0] === userID;
+  
+  console.log("Requesting: ", userID);
+  console.log("Turn: ", turnQueue[0]);
+  console.log("Check: ", turnQueue[0] == userID);
+  
+  return turnQueue[0] == userID;
 }
 
 async function updateQueue(roomID)
@@ -79,7 +88,7 @@ async function processResponsePoll(roomID)
 
   // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
   if(room.started)
-    for(let res of responsePoll[roomID])
+    for(let res of (responsePoll[roomID] || []))
     {
       console.log(true);
       res.status(200).json(true);

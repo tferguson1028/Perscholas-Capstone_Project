@@ -112,7 +112,7 @@ async function processResponsePoll(roomID)
 
   // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
   if(room.started)
-    for(let res of responsePoll[roomID])
+    for(let res of (responsePoll[roomID] || []))
     {
       console.log(true);
       res.status(200).json(true);

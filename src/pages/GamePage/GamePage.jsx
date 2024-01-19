@@ -16,7 +16,7 @@ function GamePage(props)
     const updateHappened = await gameService.awaitUpdate(room);
     if(updateHappened)
     {
-      alert("Response: " + updateHappened);
+      alert("Response: ", updateHappened);
       let data = await gameService.updateGame(room); 
       setGameData(data);
     }else
