@@ -1,5 +1,5 @@
 .Logo {
-  height: 60vmin;
+  height: 40vmin;
   width: 100%;
 
   display: flex;
@@ -27,6 +27,8 @@
   margin: 0;
   padding: 0;
 
+  color: var(--color-primary-100);
+
   font-size: 7vmin;
 }
 
@@ -45,14 +47,14 @@
   position: absolute;
   top: 200px;
 
-  width: 16vmin;
-  height: 16vmin;
+  width: 2em;
+  height: 2em;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 12vmin;
+  font-size: 5vmin;
 }
 
 .Logo .LogoSuit:nth-child(1) {
