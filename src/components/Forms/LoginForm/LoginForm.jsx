@@ -28,7 +28,7 @@ export default function LoginForm(props)
       await setUser(user);
 
     } catch {
-      setError('Log In Failed - Try Again');
+      setError('Log In Failed - Please Try Again');
     }
   }
 
@@ -38,7 +38,7 @@ export default function LoginForm(props)
         <h1>Log In Form</h1>
       </header>
       <div className="form-container" onSubmit={handleSubmit}>
-        {error.length > 0 ? <p className="error-message">{error}</p> : <></>}
+        {error.length > 0 ? <code className={styles.ErrorMessage}>{error}</code> : <></>}
         <form autoComplete="off">
           <label htmlFor="email">Email</label>
           <input
