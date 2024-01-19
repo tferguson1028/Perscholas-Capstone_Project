@@ -1,8 +1,9 @@
 import React from 'react'
 
-import styles from "./Logo.module.css";
+// import styles from "./Logo.module.css";
+import styles from "./LogoSmall.module.css";
 
-function Logo()
+function LogoSmall()
 {
   return (
     <div className={styles.Logo}>
@@ -17,4 +18,4 @@ function Logo()
   );
 }
 
-export default Logo;
+export default LogoSmall;

@@ -49,7 +49,7 @@ export default function LoginForm(props)
           />
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" value={credentials.password} onChange={handleChange} required />
-          <button type="submit">LOG IN</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     </div>

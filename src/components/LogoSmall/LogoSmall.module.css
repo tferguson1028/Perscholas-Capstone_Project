@@ -1,0 +1,99 @@
+.Logo {
+  /* height: max-content; */
+  height: 128px;
+    
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+
+  gap: 12px;
+}
+
+.Logo * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Logo > .LogoImage {
+  width: 128px;
+  
+  /* Strange offset */
+  top: 15%;
+}
+
+.Logo > h1 {
+  margin: 0;
+  padding: 0;
+
+  font-size: 28pt;
+}
+
+.Logo .LogoSuit {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24pt;
+  width: 1.4em;
+  height: 1.4em;
+}
+
+
+.Logo .LogoSuit:nth-child(1) {
+  top: 0;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -25%);
+  
+  color: var(--color-primary-100);
+}
+
+.Logo .LogoSuit:nth-child(2) {
+  top: 0;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(-125%, 50%);
+  
+  color: var(--color-primary-950);
+}
+
+.Logo .LogoSuit:nth-child(3) {
+  top: 0;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(-50%, 125%);
+  
+  color: var(--color-primary-100);
+}
+
+.Logo .LogoSuit:nth-child(4) {
+  top: 0;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(25%, 50%);
+  
+  color: var(--color-primary-950);
+}
+
+.Logo .LogoSuit::before {
+  content: "";
+  position: absolute;
+  transform-origin: center;
+  transform: rotate(45deg);
+
+  border-radius: 0.2rem;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.Logo .LogoSuit:nth-child(odd)::before {
+  background-color: var(--color-primary-vibrant-700);
+}
+
+.Logo .LogoSuit:nth-child(even)::before {
+  background-color: var(--color-primary-vibrant-100);
+}
