@@ -68,7 +68,8 @@ async function startGameDispatch(req)
 
   if(usersArr.indexOf(req.body._id) === -1)
     return null;
-
+  
+  await resetRoom(roomID);
   const turnQueue = shuffleArray(usersArr);
   const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
 
@@ -150,4 +151,20 @@ async function deleteRoom(roomID)
 {
   const status = await Room.deleteOne({ deckID: roomID });
   return status.acknowledged;
+}
+
+async function resetRoom(roomID)
+{
+  console.log(`Restarting room ${roomID}`);
+  
+  // Deck of Cards API returns all active piles no matter which pile is listed
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
+  const piles = cardData.piles || {};
+  
+  // for-in returns a key, which is the name of the pile in the api
+  // awaiting to allow function to complete before doing multiple api calls.
+  for(let pile in piles)
+    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
+    
+  await cardsAPI.returnDiscarded(roomID);
 }

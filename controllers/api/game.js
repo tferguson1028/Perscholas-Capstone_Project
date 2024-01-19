@@ -18,12 +18,13 @@ function getCards(req, res) { return null; }
 async function playerActionDispatch(req)
 {
   const roomID = req.params["roomID"];
-  const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
-  console.log("Player's turn?: ", playerTurn);
   
+  const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
   if(!playerTurn) return false;
 
-  let response = updateGameState(roomID, req.body["action"]);
+  let response = await updateGameState(roomID, req.body["action"]);
+  if(!response) return false;
+  
   updateQueue(roomID);
   processResponsePoll(roomID);
   
@@ -42,11 +43,6 @@ async function checkPlayerTurn(roomID, userID)
 {
   const room = await Room.findOne({ deckID: roomID });
   const turnQueue = room.turnQueue;
-  
-  console.log("Requesting: ", userID);
-  console.log("Turn: ", turnQueue[0]);
-  console.log("Check: ", turnQueue[0] == userID);
-  
   return turnQueue[0] == userID;
 }
 
@@ -59,9 +55,9 @@ async function updateQueue(roomID)
   const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
 }
 
-function updateGameState(roomID, action)
+async function updateGameState(roomID, action)
 {
-
+  
 }
 
 //* Long polling functionality
