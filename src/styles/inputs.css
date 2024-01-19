@@ -24,10 +24,11 @@ button:active
   color: var(--color-primary-200);
   background-color: var(--color-primary-vibrant-500);
   padding-top: 10px;
-  padding-bottom: 6px;
+  padding-bottom: 5px;
+  margin-bottom: 1px;
     /* border-bottom: 2px solid var(--color-primary-vibrant-500); */
   /* translate: 0 2px; */
-  box-shadow: 0px 4px 0px inset var(--color-background-500);
+  box-shadow: 0px 3px 0px inset var(--color-background-500);
 }
 
 button:disabled
