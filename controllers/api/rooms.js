@@ -27,10 +27,10 @@ async function createNewRoomDispatch(req)
 
 async function joinRoomDispatch(req)
 {
-  // TODO: Update the DB with the user information and respond with a room id
-
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
+  
+  if(room.started) return false;
 
   const usersArr = room.connectedUserIDs;
   if(usersArr.indexOf(req.body._id) === -1)
@@ -71,7 +71,7 @@ async function startGameDispatch(req)
   
   await resetRoom(roomID);
   const turnQueue = shuffleArray(usersArr);
-  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
+  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: false });
   await initializeRoom(roomID, turnQueue);
   
   if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
@@ -83,7 +83,7 @@ async function startGameDispatch(req)
     */
     processResponsePoll(roomID);
     console.log(`\n*** Starting game in room ${roomID}.\n`);
-    return false; 
+    return true; 
   }
   return null;
 }
@@ -115,15 +115,22 @@ function newRoom(cardAPIData)
 
 async function initializeRoom(roomID, turnQueue = [])
 {
+  let gameData = await cardsAPI.drawFromDeck(roomID, 1);
+  let card = gameData.cards[0].code;
+  
+  await cardsAPI.addToPlayerHand(roomID, "community", card);
+  await cardsAPI.returnPlayerHandToDeck(roomID, "community");
+
   for(let userID of turnQueue)
   {
     let gameData = await cardsAPI.drawFromDeck(roomID, 1);
     let card = gameData.cards[0].code;
     
-    console.log(card);
-    console.log(await cardsAPI.addToPlayerHand(roomID, userID, card));
-    console.log(await cardsAPI.returnPlayerHandToDeck(roomID, userID));
+    await cardsAPI.addToPlayerHand(roomID, userID, card);
+    await cardsAPI.returnPlayerHandToDeck(roomID, userID);
   }
+  
+  console.log("Room initialization complete");
 }
 
 async function resetRoom(roomID)
