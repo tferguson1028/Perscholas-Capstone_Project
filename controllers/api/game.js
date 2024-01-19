@@ -7,10 +7,11 @@ const response = require("./response");
 const Room = require("../../models/room");
 
 //* Exported Methods
-module.exports = { doAction, getUpdate, awaitUpdate };
+module.exports = { doAction, getUpdate, awaitUpdate, getCards };
 function doAction(req, res) { return response.respond(req, res, playerActionDispatch); }
 function getUpdate(req, res) { return response.respond(req, res, getUpdateDispatch); }
 function awaitUpdate(req, res) { return awaitUpdateDispatch(req, res); }
+function getCards(req, res) { return null; }
 
 
 //* Dispatch Methods
