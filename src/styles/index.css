@@ -40,6 +40,13 @@ main * {
   font-size: clamp(12pt, 2.5vmin, 16pt);
 }
 
+h1, h2, h3, h4, h5, h6
+{
+  margin: 0;
+  padding: 0;
+}
+
+
 h1 {
   font-size: clamp(18pt, 6vmin, 48pt) !important;
 }
@@ -49,19 +56,19 @@ h2 {
 }
 
 h3 {
-  font-size: clamp(18pt, 4.5vmin, 32pt) !important;
+  font-size: clamp(16pt, 4.5vmin, 32pt) !important;
 }
 
 h4 {
-  font-size: clamp(18pt, 4vmin, 28pt) !important;
+  font-size: clamp(16pt, 4vmin, 28pt) !important;
 }
 
 h5 {
-  font-size: clamp(18pt, 3.5vmin, 24pt) !important;
+  font-size: clamp(16pt, 3.5vmin, 24pt) !important;
 }
 
 h6 {
-  font-size: clamp(18pt, 3vmin, 18pt) !important;
+  font-size: clamp(14pt, 3vmin, 18pt) !important;
 }
 
 code {
