@@ -18,6 +18,7 @@ function GamePage(props)
     {
       alert("Response: ", updateHappened);
       let data = await gameService.updateGame(room); 
+      setGameData(null);
       setGameData(data);
     }else
       updateGame();
