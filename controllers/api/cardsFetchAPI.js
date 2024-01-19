@@ -17,7 +17,7 @@ const cardsAPI = {
   },
 
   // PLayer Pile Calls (Players are considered piles)
-  addToPlayerHand: (deckID, playerID, cardAbbr) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/add/${cardAbbr}`); },
+  addToPlayerHand: (deckID, playerID, cardAbbr) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/add/?cards=${cardAbbr}`); },
   viewPlayerHand: (deckID, playerID) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/list`); },
   drawFromPlayerHand: (deckID, count = 1) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${pile}/draw/?count=${count}`); },
   returnPlayerHandToDeck: (deckID, playerID) => { return getAPIData(`https://deckofcardsapi.com/api/deck/${deckID}/pile/${playerID}/return`); }

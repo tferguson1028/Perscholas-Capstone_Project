@@ -14,7 +14,7 @@ function start(req, res) { return response.respond(req, res, startGameDispatch);
 
 function awaitStart(req, res) { return awaitStartGameDispatch(req, res); }
 
-//* Dispatch Methods
+//# Dispatch Methods
 async function createNewRoomDispatch(req)
 {
   console.log(`Created new room with ID: ${404}`);
@@ -72,7 +72,8 @@ async function startGameDispatch(req)
   await resetRoom(roomID);
   const turnQueue = shuffleArray(usersArr);
   const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
-
+  await initializeRoom(roomID, turnQueue);
+  
   if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
   {
     /* 
@@ -87,7 +88,68 @@ async function startGameDispatch(req)
   return null;
 }
 
-//* Long polling functionality
+//# Internal Methods
+function shuffleArray(arr = [])
+{
+  let arrClone = [...arr]; //Clone array
+  let newArr = [];
+
+  while(arrClone.length > 0)
+  {
+    let index = Math.floor(Math.random() * arrClone.length);
+    newArr.push(arrClone.splice(index, 1));
+  }
+
+  return newArr.flat();
+}
+
+function newRoom(cardAPIData)
+{
+  return (
+    {
+      deckID: cardAPIData.deck_id,
+      connectedUserIDs: [],
+      turnQueue: []
+    });
+}
+
+async function initializeRoom(roomID, turnQueue = [])
+{
+  for(let userID of turnQueue)
+  {
+    let gameData = await cardsAPI.drawFromDeck(roomID, 1);
+    let card = gameData.cards[0].code;
+    
+    console.log(card);
+    console.log(await cardsAPI.addToPlayerHand(roomID, userID, card));
+    console.log(await cardsAPI.returnPlayerHandToDeck(roomID, userID));
+  }
+}
+
+async function resetRoom(roomID)
+{
+  console.log(`Restarting room ${roomID}`);
+  
+  // Deck of Cards API returns all active piles no matter which pile is listed
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
+  const piles = cardData.piles || {};
+  
+  // for-in returns a key, which is the name of the pile in the api
+  // awaiting to allow function to complete before doing multiple api calls.
+  for(let pile in piles)
+    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
+    
+  await cardsAPI.returnDiscarded(roomID);
+}
+
+async function deleteRoom(roomID)
+{
+  const status = await Room.deleteOne({ deckID: roomID });
+  return status.acknowledged;
+}
+
+
+//# Long polling functionality
 // Refs: 
 //   https://ably.com/topic/websocket-alternatives#long-polling
 //   https://stackoverflow.com/a/45854088
@@ -120,51 +182,4 @@ async function processResponsePoll(roomID)
     }
     
   responsePoll[roomID] = undefined;
-}
-
-//* Internal Methods
-function shuffleArray(arr = [])
-{
-  let arrClone = [...arr]; //Clone array
-  let newArr = [];
-
-  while(arrClone.length > 0)
-  {
-    let index = Math.floor(Math.random() * arrClone.length);
-    newArr.push(arrClone.splice(index, 1));
-  }
-
-  return newArr.flat();
-}
-
-function newRoom(cardAPIData)
-{
-  return (
-    {
-      deckID: cardAPIData.deck_id,
-      connectedUserIDs: [],
-      turnQueue: []
-    });
-}
-
-async function deleteRoom(roomID)
-{
-  const status = await Room.deleteOne({ deckID: roomID });
-  return status.acknowledged;
-}
-
-async function resetRoom(roomID)
-{
-  console.log(`Restarting room ${roomID}`);
-  
-  // Deck of Cards API returns all active piles no matter which pile is listed
-  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
-  const piles = cardData.piles || {};
-  
-  // for-in returns a key, which is the name of the pile in the api
-  // awaiting to allow function to complete before doing multiple api calls.
-  for(let pile in piles)
-    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
-    
-  await cardsAPI.returnDiscarded(roomID);
 }
