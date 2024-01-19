@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import * as userService from "../../utilities/users-service";
 import * as roomService from "../../utilities/room-service";
 
+import Logo from '../../components/Logo/Logo';
+
+import styles from "./HomePage.module.css";
+
 function HomePage(props)
 {
   const { user = {}, setUser = () => {}, setRoom = () => {} } = props;
@@ -38,8 +42,8 @@ function HomePage(props)
   }
   
   return (
-    <main>
-      <div>HomePage</div>
+    <main style={styles.HomePage}>
+      <Logo />
       <section>
       </section>
       <section>
