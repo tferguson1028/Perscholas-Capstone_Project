@@ -9,7 +9,10 @@ function GamePage(props)
   const { user, room, setRoom } = props;
   const [gameData, setGameData] = useState(null);
 
+  useEffect(() => { startGame(); }, []);
   useEffect(() => { updateGame(); }, [gameData]);
+  
+  async function startGame() { gameService.startGame(room);}
   
   async function updateGame()
   {

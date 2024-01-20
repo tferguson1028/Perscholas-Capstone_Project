@@ -50,7 +50,7 @@ async function playerActionDispatch(req)
   let turnsDone = turnsDone;
   if(turnsDone >= users.length)
   {
-    nextRound(roomID);
+    await nextRound(roomID);
     await Room.updateOne({ deckID: roomID }, { turnsDone: 0 });
   }
 
@@ -79,14 +79,14 @@ async function getCardsDispatch(req)
 //# Internal Methods
 async function nextRound(roomID)
 {
-
+  await clearPiles(roomID);
 }
 
 async function updateGameState(roomID, userID, action)
 {
   switch(action)
   {
-
+    
   }
 }
 
@@ -106,25 +106,21 @@ async function updateQueue(roomID)
   const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
 }
 
-async function dealCards(roomID, turnQueue = [])
+async function dealCards(roomID, turnQueue = [], amount = 1)
 {
-  let cards = await cardsAPI.drawFromDeck(roomID, 2 * turnQueue.length);
+  let cards = await cardsAPI.drawFromDeck(roomID, amount*turnQueue.length);
 
   for(let player of turnQueue)
   {
     let card = cards.pop().code;
     await cardsAPI.addToPlayerHand(roomID, player, card);
   }
-
-  cards = await cardsAPI.drawFromDeck(roomID, 3);
-  for(let card of cards)
-    await cardsAPI.addToPlayerHand(roomID, player, card);
 }
 
 async function getHandRank(roomID, userID)
 {
   const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
-  let cards = gameData.piles[userID].cards;
+  let cards = gameData.piles[userID].cards || [];
 }
 
 async function clearPiles(roomID)
