@@ -26,7 +26,7 @@ async function startDispatch(req)
 
   if(!room.started)
   {
-    await Room.updateOne({ deckID: roomID }, { started: true });
+    await Room.updateOne({ _id: room._id }, { started: true });
     nextRound(roomID);
   }
 
@@ -51,7 +51,7 @@ async function playerActionDispatch(req)
   if(turnsDone >= users.length)
   {
     await nextRound(roomID);
-    await Room.updateOne({ deckID: roomID }, { turnsDone: 0 });
+    await Room.updateOne({ _id: room._id }, { turnsDone: 0 });
   }
 
   processResponsePoll(roomID);
@@ -79,15 +79,64 @@ async function getCardsDispatch(req)
 //# Internal Methods
 async function nextRound(roomID)
 {
+  const room = await Room.findOne({ deckID: roomID });
+  const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
+  const communityPile = gameData.piles["community"].cards || [];
+  if(room.lastBet > 0 || communityPile.length >= 5)
+  {
+    // Hand is over, reset
+    await nextHand(roomID);
+  }else{
+    const turnQueue = shuffleArray(room.connectedUserIDs);
+    await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+  }
+}
+
+async function nextHand(roomID)
+{
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
+  const piles = cardData.piles || {};
+  let bestHand = Number.MIN_SAFE_INTEGER;
+  let currentWinner = "house :P";
+  for(let pile in piles)
+  {
+    const player = await cardsAPI.viewPlayerHand(roomID, pile);
+    const hand = player.cards;
+    const handRank = evaluateHand(hand);
+    
+    if(bestHand < handRank)
+    {
+      bestHand = handRank;
+      currentWinner = pile;
+    }
+    const turnQueue = shuffleArray(usersArr);
+    await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+
+    await emptyPotTo(roomID, currentWinner);
+  }
+  
   await clearPiles(roomID);
 }
 
-async function updateGameState(roomID, userID, action)
+async function evaluateHand(hand = [])
 {
-  switch(action)
+  const handRank = func();
+  
+}
+
+async function updateGameState(roomID, userID, actionPayload)
+{
+  const room = await Room.findOne({ deckID: roomID });
+  const lastBet = room.lastBet;
+  switch(actionPayload.action)
   {
-    
+    case "check": break;
+    case "call": addToPot(roomID, userID, lastBet); break;
+    case "raise": addToPot(roomID, userID, actionPayload.value); break;
+    case "fold": break;
+    default: return false;
   }
+  return true;
 }
 
 async function checkPlayerTurn(roomID, userID)
@@ -144,7 +193,7 @@ async function addToPot(roomID, userID, amount = 0)
   let potValue = amount + room.pot;
   let userValue = user.money - amount;
 
-  await Room.updateOne({ deckID: roomID }, { pot: potValue });
+  await Room.updateOne({ _id: room._id }, { pot: potValue });
   await User.updateOne({ _id: userID }, { money: userValue });
 }
 
@@ -154,8 +203,8 @@ async function emptyPotTo(roomID, userID)
   const user = await User.findOne({ _id: userID });
 
   const value = user.money + room.pot;
+  await Room.updateOne({ _id: room._id }, { pot: 0 });
   await User.updateOne({ _id: userID }, { money: value });
-  await Room.updateOne({ deckID: roomID }, { pot: 0 });
 }
 
 
@@ -192,4 +241,20 @@ async function processResponsePoll(roomID)
   }
 
   responsePoll[roomID] = undefined;
+}
+
+
+//# Aux Methods
+function shuffleArray(arr = [])
+{
+  let arrClone = [...arr]; //Clone array
+  let newArr = [];
+
+  while(arrClone.length > 0)
+  {
+    let index = Math.floor(Math.random() * arrClone.length);
+    newArr.push(arrClone.splice(index, 1));
+  }
+
+  return newArr.flat();
 }

@@ -7,7 +7,9 @@ const roomSchema = new Schema(
     connectedUserIDs: [ { type: String, required: true } ],
     turnQueue: [ { type: String, required: true } ],
     turnsDone: { type: Number, default: 0, required: true },
-    started: { type: Boolean, default: false }
+    started: { type: Boolean, default: false, required: true },
+    pot: { type: Number, default: 0, required: true },
+    lastBet: { type: Number, default: 0, required: true }
   }, {
   timestamps: true
 });
