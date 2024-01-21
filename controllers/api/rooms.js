@@ -22,7 +22,7 @@ async function createNewRoomDispatch(req)
   const gameDeck = await cardsAPI.newDeck();
   console.log(gameDeck);
   const room = await Room.create(newRoom(gameDeck));
-  return room;
+  return room.deckID;
 }
 
 async function joinRoomDispatch(req)
@@ -30,6 +30,7 @@ async function joinRoomDispatch(req)
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
   
+  console.log("Joining room: ", room);
   if(room.started) return false;
 
   const usersArr = room.connectedUserIDs;

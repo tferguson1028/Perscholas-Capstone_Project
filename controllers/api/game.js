@@ -80,6 +80,7 @@ async function getCardsDispatch(req)
 //# Internal Methods
 async function nextRound(roomID)
 {
+  const room = await Room.findOne({ deckID: roomID });
   const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
   const communityPile = gameData.piles["community"].cards || [];
   if(communityPile.length >= 5 || room.lastBet === 0)

@@ -29,15 +29,18 @@ function HomePage(props)
   async function handleRoomCreate()
   {
     const roomID = await roomService.createRoom(user);
-    console.log(roomID);
+    console.log("Created room with id: ", roomID);
     setRoom(roomID);
+    
+    handleRoomJoin(undefined, roomID);
   }
 
-  async function handleRoomJoin(event)
+  async function handleRoomJoin(event, roomID)
   {
-    event.preventDefault();
-
-    const roomID = await roomService.joinRoom(joinID, user);
+    if(event) event.preventDefault();
+    
+    roomID = roomID ? roomID : await roomService.joinRoom(joinID, user);
+    console.log("Joining room with id: ", roomID);
     setRoom(roomID);
   }
 
@@ -50,10 +53,10 @@ function HomePage(props)
         <p>{user.name}</p>
         <p>
           <span>Tokens</span>
-          <div>
+          <span>
             <span>&#x1FA99;</span>
             {user.money}
-          </div>
+          </span>
         </p>
         <button>Edit User</button>
       </section>
