@@ -182,7 +182,7 @@ async function processResponsePoll(roomID)
   const room = await Room.findOne({ deckID: roomID });
 
   // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
-  if(room.started)
+  // if(room.started)
     for(let res of (responsePoll[roomID] || []))
     {
       console.log(true);

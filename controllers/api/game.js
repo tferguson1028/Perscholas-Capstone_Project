@@ -27,9 +27,12 @@ async function startDispatch(req)
   if(!room.started)
   {
     await Room.updateOne({ _id: room._id }, { started: true });
-    nextRound(roomID);
+  }else
+  {
+    // nextRound(roomID);
   }
-
+  
+  processResponsePoll(roomID);
   return room.started;
 }
 
@@ -39,8 +42,10 @@ async function playerActionDispatch(req)
   const room = await Room.findOne({ deckID: roomID });
   const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
   if(!playerTurn) return false;
-
-  let response = await updateGameState(roomID, req.body["action"]);
+  
+  console.log(req.body["user"]);
+  console.log(req.body["action"]);
+  let response = await updateGameState(roomID, req.body["user"]._id, req.body["action"]);
   if(!response) return false;
 
   console.log("Response_dispatch: ", response);
@@ -83,17 +88,19 @@ async function nextRound(roomID)
   const room = await Room.findOne({ deckID: roomID });
   const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
   const communityPile = gameData.piles["community"].cards || [];
-  if(communityPile.length >= 5 || room.lastBet === 0)
+  if(communityPile.length >= 5 || (room.turnsDone > 0 && room.lastBet === 0))
   {
     // Hand is over if no one raised the bet.
     await nextHand(roomID);
   } else if(communityPile.length === 0)
   {
-    await dealCards(roomID, "community", 3);
+    await dealCards(roomID, ["community"], 3); // community is in array due to how the function works
   } else
   {
-    await dealCards(roomID, "community", 1);
+    await dealCards(roomID, ["community"], 1);
   }
+
+  await Room.updateOne({ _id: room._id }, { turnsDone: room.turnsDone + 1 });
 }
 
 async function nextHand(roomID)
@@ -114,13 +121,11 @@ async function nextHand(roomID)
       bestHand = handRank;
       currentWinner = pile;
     }
-    const turnQueue = shuffleArray(usersArr);
-    await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
-    await emptyPotTo(roomID, currentWinner);
   }
 
   const turnQueue = shuffleArray(room.connectedUserIDs);
-  await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+  await emptyPotTo(roomID, currentWinner);
+  await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, turnsDone: 0 });
   await clearPiles(roomID);
   await dealCards(roomID, turnQueue, 2);
 }
@@ -131,15 +136,17 @@ async function evaluateHand(hand = [])
 
 }
 
-async function updateGameState(roomID, userID, actionPayload)
+async function updateGameState(roomID, userID, action)
 {
   const room = await Room.findOne({ deckID: roomID });
   const lastBet = room.lastBet;
-  switch(actionPayload.action)
+  
+  console.log(action);
+  switch(action.action)
   {
     case "check": break;
     case "call": addToPot(roomID, userID, lastBet); break;
-    case "raise": addToPot(roomID, userID, actionPayload.value); break;
+    case "raise": addToPot(roomID, userID, action.value); break;
     case "fold": break;
     default: return false;
   }
@@ -167,7 +174,7 @@ async function dealCards(roomID, turnQueue = [], amount = 1)
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
   for(let player of [...turnQueue].flat())
   {
-    let card = cards.pop().code;
+    let card = cards.cards.pop().code;
     await cardsAPI.addToPlayerHand(roomID, player, card);
   }
 }
@@ -239,7 +246,7 @@ async function processResponsePoll(roomID)
   // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
   if(room.started)
   {
-    for(let res of(responsePool[roomID] || []))
+    for(let res of (responsePoll[roomID] || []))
     {
       console.log(true);
       res.status(200).json(true);

@@ -33,7 +33,7 @@ async function getAPIData(request)
     console.log("Fetching data");
     const result = await fetch(request);
     const data = await result.json();
-    console.log("Retrieved Data");
+    console.log("Retrieved Data: ", data);
     // console.log(data);
     return data;
   } catch(exception)
