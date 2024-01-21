@@ -28,8 +28,10 @@ function GameControls(props)
       <div>
         <button onClick={() => { doAction({ action: "check" }); }}>Check</button>
         <button onClick={() => { doAction({ action: "call" }); }}>Call</button>
-        <button onClick={() => { doAction({ action: "raise", amount: value }); }}>Raise</button>
-        <input onChange={(event) => { setValue(event.target.value); }} type="number" name="raise" id="raise" />
+        <form onSubmit={(event) => { event.preventDefault(); doAction({ action: "raise", amount: value }); }}>
+          <button type="submit">Raise</button>
+          <input onChange={(event) => { setValue(event.target.value); }} type="number" name="raise" id="raise" required="true"/>
+        </form>
         <button onClick={() => { doAction({ action: "fold" }); }}>Fold</button>
         <button onClick={leaveRoom}>Leave</button>
       </div>
