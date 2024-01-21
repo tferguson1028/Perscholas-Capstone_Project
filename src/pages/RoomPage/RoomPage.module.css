@@ -1,0 +1,17 @@
+.RoomPage
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.RoomPage > section > code
+{
+  font-weight: bold;
+  color: var(--color-primary-900);
+}
+
+.RoomPage > *:nth-child(2)
+{
+  
+  flex: 1;
+}

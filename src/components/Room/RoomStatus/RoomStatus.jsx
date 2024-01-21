@@ -1,9 +1,24 @@
 import React from 'react';
 
-function RoomStatus()
+import styles from "./RoomStatus.module.css";
+
+function RoomStatus(props)
 {
+  const { user, users = [] } = props;
+
+  console.log(users);
+
   return (
-    <div>RoomStatus</div>
+    <div className={styles.UserList}>
+      {
+        users.map((otherUser) => 
+        {
+          return user.name === otherUser ?
+            <code className='warning'>{otherUser}</code> :
+            <code >{otherUser}</code>;
+        })
+      }
+    </div>
   );
 }
 

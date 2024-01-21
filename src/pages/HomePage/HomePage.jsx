@@ -11,6 +11,7 @@ function HomePage(props)
 {
   const { user = {}, setUser = () => {}, setRoom = () => {} } = props;
   const [joinID, setJoinID] = useState();
+  const [error, setError] = useState("");
 
   function handleLogOut() 
   {
@@ -31,15 +32,16 @@ function HomePage(props)
     const roomID = await roomService.createRoom(user);
     console.log("Created room with id: ", roomID);
     setRoom(roomID);
-    
+
     handleRoomJoin(undefined, roomID);
   }
 
   async function handleRoomJoin(event, roomID)
   {
     if(event) event.preventDefault();
-    
+
     roomID = roomID ? roomID : await roomService.joinRoom(joinID, user);
+    if(!roomID) setError("Failed to join");
     console.log("Joining room with id: ", roomID);
     setRoom(roomID);
   }
@@ -48,6 +50,7 @@ function HomePage(props)
     <main className={styles.HomePage}>
       <Logo />
       <section className={styles.RoomList}>
+        {error ? <h4>{error}</h4> : <></>}
       </section>
       <section className={styles.UserDisplay}>
         <p>{user.name}</p>

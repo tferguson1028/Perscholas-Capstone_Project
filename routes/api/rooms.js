@@ -13,6 +13,6 @@ router.post("/start/:roomID", ensureLoggedIn, roomsController.start);
 
 // GET Routes
 router.get("/start/:roomID/await", roomsController.awaitStart);
-
+router.get("/users/:roomID", roomsController.getUsers);
 
 module.exports = router;

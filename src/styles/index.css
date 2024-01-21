@@ -28,7 +28,7 @@ body {
 
 main {
   padding: 24px;
-  gap: 12px;
+  gap: 8px;
 
   height: 100%;
   
@@ -40,6 +40,10 @@ main * {
   
   /* https://css-tricks.com/how-do-you-do-max-font-size-in-css/ */
   font-size: clamp(12pt, 2.5vmin, 16pt);
+}
+
+#root {
+  height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6
@@ -76,7 +80,24 @@ h6 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
-#root {
-  height: 100%;
+.error
+{
+  color: var(--color-system-error) !important;
 }
+
+.warning
+{
+  color: var(--color-system-warning) !important;
+}
+
+.info
+{
+  color: var(--color-system-info) !important;
+}
+
+.success
+{
+  color: var(--color-system-success) !important;
+}
+
+

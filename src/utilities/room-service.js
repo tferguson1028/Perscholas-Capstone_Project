@@ -24,6 +24,12 @@ export async function startGame(roomID, userData)
   return status;
 }
 
+export async function getUsers(roomID)
+{
+  const users = await roomAPI.getUsers(roomID);
+  return users;
+}
+
 export async function awaitStartGame(roomID)
 {
   const status = await roomAPI.awaitStartGame(roomID);

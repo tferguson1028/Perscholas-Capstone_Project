@@ -1,16 +1,20 @@
 const response = require("./response");
-const Room = require("../../models/room");
+
 const cardsAPI = require("./cardsFetchAPI");
+
+const Room = require("../../models/room");
+const User = require("../../models/user");
 
 // Clear all rooms on server start
 // Room.deleteMany({});
 
 //* Exported Methods
-module.exports = { create, join, leave, start, awaitStart };
+module.exports = { create, join, leave, start, getUsers, awaitStart };
 function create(req, res) { return response.respond(req, res, createNewRoomDispatch); }
 function join(req, res) { return response.respond(req, res, joinRoomDispatch); }
 function leave(req, res) { return response.respond(req, res, leaveRoomDispatch); }
 function start(req, res) { return response.respond(req, res, startGameDispatch); }
+function getUsers(req, res) { return response.respond(req, res, getUsersDispatch);}
 
 function awaitStart(req, res) { return awaitStartGameDispatch(req, res); }
 
@@ -87,6 +91,19 @@ async function startGameDispatch(req)
     return true; 
   }
   return null;
+}
+
+async function getUsersDispatch(req)
+{
+  
+  const roomID = req.params["roomID"];
+  const room = await Room.findOne({ deckID: roomID });
+  const userIDArr = room.connectedUserIDs;
+  
+  let users = [];
+  for(let userID of userIDArr)
+    users.push((await User.findById(userID)).name);
+  return users;
 }
 
 //# Internal Methods
