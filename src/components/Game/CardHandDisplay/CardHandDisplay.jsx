@@ -7,10 +7,10 @@ function CardHandDisplay(props)
     <div>
       {
         hand.map((card) => 
-        { 
-          return card === null ? 
-            <img src={card.image} alt="#" /> :  
-            <img src="https://deckofcardsapi.com/static/img/back.png" alt="#" />
+        {
+          return card ? 
+            <span><img src={card.image} alt="#" /></span> :  
+            <span><img src="https://deckofcardsapi.com/static/img/back.png" alt="#" /></span>
         })
       }
     </div>

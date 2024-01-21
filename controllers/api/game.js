@@ -70,11 +70,13 @@ async function getUpdateDispatch(req)
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
   const cardData = await cardsAPI.viewPlayerHand(roomID, "All");
-
+  const currentTurn = await User.findById(room.turnQueue[0]);
+  
   return {
     pot: room.pot,
     lastBet: room.lastBet,
     turnsDone: room.turnsDone,
+    currentTurn: currentTurn.name,
     cardData
   };
 }

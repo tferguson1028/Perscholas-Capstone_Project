@@ -23,7 +23,7 @@ function GameControls(props)
   }
 
   return (
-    <footer>
+    <section>
       {error.length > 0 ? <div><p>{error}</p></div> : <></>}
       <div>
         <button onClick={() => { doAction({ action: "check" }); }}>Check</button>
@@ -35,7 +35,7 @@ function GameControls(props)
         <button onClick={() => { doAction({ action: "fold" }); }}>Fold</button>
         <button onClick={leaveRoom}>Leave</button>
       </div>
-    </footer>
+    </section>
   );
 }
 
