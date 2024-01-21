@@ -27,11 +27,12 @@ async function startDispatch(req)
   if(!room.started)
   {
     await Room.updateOne({ _id: room._id }, { started: true });
-  }else
+    dealCards(roomID, room.turnQueue, 2);
+  } else
   {
     // nextRound(roomID);
   }
-  
+
   processResponsePoll(roomID);
   return room.started;
 }
@@ -42,7 +43,7 @@ async function playerActionDispatch(req)
   const room = await Room.findOne({ deckID: roomID });
   const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
   if(!playerTurn) return false;
-  
+
   console.log(req.body["user"]);
   console.log(req.body["action"]);
   let response = await updateGameState(roomID, req.body["user"]._id, req.body["action"]);
@@ -64,19 +65,32 @@ async function playerActionDispatch(req)
   return response;
 }
 
-function getUpdateDispatch(req)
+async function getUpdateDispatch(req)
 {
-  return null;
+  const roomID = req.params["roomID"];
+  const room = await Room.findOne({ deckID: roomID });
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "All");
+
+  return {
+    pot: room.pot,
+    lastBet: room.lastBet,
+    turnsDone: room.turnsDone,
+    cardData
+  };
 }
 
 async function getCardsDispatch(req)
 {
   const roomID = req.params["roomID"];
   const userID = req.params["userID"]; // Don't peak
+  
+  console.log("Cards from ", roomID+"/"+userID);
 
   const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
   const pile = gameData["piles"][userID];
-
+  
+  console.log(pile);
+  
   if(pile)
     return pile.cards;
   return [];
@@ -140,7 +154,7 @@ async function updateGameState(roomID, userID, action)
 {
   const room = await Room.findOne({ deckID: roomID });
   const lastBet = room.lastBet;
-  
+
   console.log(action);
   switch(action.action)
   {
@@ -246,7 +260,7 @@ async function processResponsePoll(roomID)
   // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
   if(room.started)
   {
-    for(let res of (responsePoll[roomID] || []))
+    for(let res of(responsePoll[roomID] || []))
     {
       console.log(true);
       res.status(200).json(true);

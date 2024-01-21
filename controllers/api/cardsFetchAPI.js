@@ -30,10 +30,10 @@ async function getAPIData(request)
 {
   try
   {
-    console.log("Fetching data");
+    console.log("Fetching data from: ", request);
     const result = await fetch(request);
     const data = await result.json();
-    console.log("Retrieved Data: ", data);
+    // console.log("Retrieved Data: ", data);
     // console.log(data);
     return data;
   } catch(exception)

@@ -17,7 +17,12 @@ export async function updateGame(roomID)
 {
   const response = await gameAPI.getUpdate(roomID);
   return response;
-  
+}
+
+export async function getCards(roomID, userData)
+{
+  const response = await gameAPI.getCards(roomID, userData);
+  return response;
 }
 
 export async function awaitUpdate(roomID)
