@@ -9,6 +9,40 @@
   gap: 24px;
 }
 
+.AuthenticationPage::before
+{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  background-image: url("https://img.freepik.com/premium-vector/black-background-poker-casino_47243-1156.jpg");
+  background-repeat: repeat;
+  background-size: 85%;
+  opacity: 5%;
+  filter: saturate(0%) brightness(1000%) contrast(50%) blur(-50%);
+  
+  animation-name: gradient;
+  animation-duration: 20s;
+  animation-delay: 0;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+/* https://codepen.io/P1N2O/pen/pyBNzX */
+/* Image is 626px */
+@keyframes gradient {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: calc(626px*0.855) 0;
+	}
+}
+
 .AuthenticationPage > *:nth-child(1) {
   color: var(--color-mono-50);
 }
