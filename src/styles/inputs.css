@@ -1,0 +1,45 @@
+button, input, textarea
+{
+  padding: 8px;
+  border: 0;
+  border-radius: 0.2rem;
+}
+
+button
+{
+  font-weight: bold;
+  background-color: var(--color-primary-500);
+}
+
+button:hover
+{
+  background-color: var(--color-primary-vibrant-400);
+  
+  /* https://www.tutorialrepublic.com/faq/how-to-change-the-cursor-into-a-hand-pointer-on-hover-using-css.php */
+  cursor: pointer;
+}
+
+button:active
+{
+  color: var(--color-primary-200);
+  background-color: var(--color-primary-vibrant-500);
+  padding-top: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 1px;
+    /* border-bottom: 2px solid var(--color-primary-vibrant-500); */
+  /* translate: 0 2px; */
+  box-shadow: 0px 3px 0px inset var(--color-background-500);
+}
+
+button:disabled
+{
+  background-color: var(--color-mono-500);
+  color: var(--color-mono-800);
+  
+}
+
+input
+{
+  color: var(--color-mono-0);
+  background-color: var(--color-background-900);
+}

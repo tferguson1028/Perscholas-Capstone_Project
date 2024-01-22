@@ -13,7 +13,7 @@ function RoomControls(props)
   async function awaitStartGame()
   {
     const status = await roomService.awaitStartGame(room);
-
+    
     // https://stackoverflow.com/a/40380010
     if(status)
     {

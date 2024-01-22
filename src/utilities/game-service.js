@@ -7,11 +7,22 @@ export async function sendAction(roomID, userData, actionPayload)
   return response;
 }
 
+export async function startGame(roomID)
+{
+  const response = await gameAPI.startGame(roomID);
+  return response;
+}
+
 export async function updateGame(roomID)
 {
   const response = await gameAPI.getUpdate(roomID);
   return response;
-  
+}
+
+export async function getCards(roomID, userData)
+{
+  const response = await gameAPI.getCards(roomID, userData);
+  return response;
 }
 
 export async function awaitUpdate(roomID)

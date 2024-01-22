@@ -1,0 +1,16 @@
+.UserList
+{
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  
+  gap: 8px;
+  
+  color: var(--color-mono-100);
+  background-color: var(--color-background-950);
+  
+  border: 2px solid var(--color-background-400);
+  
+  margin-bottom: 4px;
+  box-shadow: 0 0 8px inset var(--color-background-200);
+}

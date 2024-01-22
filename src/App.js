@@ -8,6 +8,10 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
 import RoomPage from "./pages/RoomPage/RoomPage.jsx";
 import GamePage from "./pages/GamePage/GamePage.jsx";
 
+// General Styling
+import "./styles/inputs.css";
+import "./styles/sections.css";
+
 function App()
 {
   const [user, setUser] = useState(getUser());

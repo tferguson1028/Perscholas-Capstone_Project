@@ -1,20 +1,24 @@
 const response = require("./response");
-const Room = require("../../models/room");
+
 const cardsAPI = require("./cardsFetchAPI");
+
+const Room = require("../../models/room");
+const User = require("../../models/user");
 
 // Clear all rooms on server start
 // Room.deleteMany({});
 
 //* Exported Methods
-module.exports = { create, join, leave, start, awaitStart };
+module.exports = { create, join, leave, start, getUsers, awaitStart };
 function create(req, res) { return response.respond(req, res, createNewRoomDispatch); }
 function join(req, res) { return response.respond(req, res, joinRoomDispatch); }
 function leave(req, res) { return response.respond(req, res, leaveRoomDispatch); }
 function start(req, res) { return response.respond(req, res, startGameDispatch); }
+function getUsers(req, res) { return response.respond(req, res, getUsersDispatch);}
 
 function awaitStart(req, res) { return awaitStartGameDispatch(req, res); }
 
-//* Dispatch Methods
+//# Dispatch Methods
 async function createNewRoomDispatch(req)
 {
   console.log(`Created new room with ID: ${404}`);
@@ -22,20 +26,21 @@ async function createNewRoomDispatch(req)
   const gameDeck = await cardsAPI.newDeck();
   console.log(gameDeck);
   const room = await Room.create(newRoom(gameDeck));
-  return room;
+  return room.deckID;
 }
 
 async function joinRoomDispatch(req)
 {
-  // TODO: Update the DB with the user information and respond with a room id
-
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
+  
+  console.log("Joining room: ", room);
+  if(room.started) return false;
 
   const usersArr = room.connectedUserIDs;
   if(usersArr.indexOf(req.body._id) === -1)
     usersArr.push(req.body._id);
-
+    
   const updatedRoom = await Room.updateOne({ _id: room._id }, { connectedUserIDs: usersArr });
   console.log(room);
   console.log(updatedRoom);
@@ -68,11 +73,12 @@ async function startGameDispatch(req)
 
   if(usersArr.indexOf(req.body._id) === -1)
     return null;
-
+  
+  await resetRoom(roomID);
   const turnQueue = shuffleArray(usersArr);
-  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: true });
-
-
+  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, started: false });
+  await initializeRoom(roomID, turnQueue);
+  
   if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
   {
     /* 
@@ -82,47 +88,25 @@ async function startGameDispatch(req)
     */
     processResponsePoll(roomID);
     console.log(`\n*** Starting game in room ${roomID}.\n`);
-    return false; 
+    return true; 
   }
   return null;
 }
 
-//* Long polling functionality
-// Refs: 
-//   https://ably.com/topic/websocket-alternatives#long-polling
-//   https://stackoverflow.com/a/45854088
-const responsePoll = {
-  exampleStack: ["res", "res", "res"],
-};
-
-async function awaitStartGameDispatch(req, res)
+async function getUsersDispatch(req)
 {
+  
   const roomID = req.params["roomID"];
-  
-  console.log(`Connection added to poll for room ${roomID}. Response will be sent to client upon game start.`);
-  
-  if(typeof responsePoll[roomID] === "undefined")
-    responsePoll[roomID] = [];
-  
-  responsePoll[roomID].push(res);
-}
-
-async function processResponsePoll(roomID)
-{
   const room = await Room.findOne({ deckID: roomID });
-
-  // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
-  if(room.started)
-    for(let res of responsePoll[roomID])
-    {
-      console.log(true);
-      res.status(200).json(true);
-    }
-    
-  responsePoll[roomID] = undefined;
+  const userIDArr = room.connectedUserIDs;
+  
+  let users = [];
+  for(let userID of userIDArr)
+    users.push((await User.findById(userID)).name);
+  return users;
 }
 
-//* Internal Methods
+//# Internal Methods
 function shuffleArray(arr = [])
 {
   let arrClone = [...arr]; //Clone array
@@ -147,8 +131,80 @@ function newRoom(cardAPIData)
     });
 }
 
+async function initializeRoom(roomID, turnQueue = [])
+{
+  let gameData = await cardsAPI.drawFromDeck(roomID, 1);
+  let card = gameData.cards[0].code;
+  
+  await cardsAPI.addToPlayerHand(roomID, "community", card);
+  await cardsAPI.returnPlayerHandToDeck(roomID, "community");
+
+  for(let userID of turnQueue)
+  {
+    let gameData = await cardsAPI.drawFromDeck(roomID, 1);
+    let card = gameData.cards[0].code;
+    
+    await cardsAPI.addToPlayerHand(roomID, userID, card);
+    await cardsAPI.returnPlayerHandToDeck(roomID, userID);
+  }
+  
+  console.log("Room initialization complete");
+}
+
+async function resetRoom(roomID)
+{
+  console.log(`Restarting room ${roomID}`);
+  
+  // Deck of Cards API returns all active piles no matter which pile is listed
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
+  const piles = cardData.piles || {};
+  
+  // for-in returns a key, which is the name of the pile in the api
+  // awaiting to allow function to complete before doing multiple api calls.
+  for(let pile in piles)
+    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
+    
+  await cardsAPI.returnDiscarded(roomID);
+}
+
 async function deleteRoom(roomID)
 {
   const status = await Room.deleteOne({ deckID: roomID });
   return status.acknowledged;
+}
+
+
+//# Long polling functionality
+// Refs: 
+//   https://ably.com/topic/websocket-alternatives#long-polling
+//   https://stackoverflow.com/a/45854088
+const responsePoll = {
+  exampleStack: ["res", "res", "res"],
+};
+
+async function awaitStartGameDispatch(req, res)
+{
+  const roomID = req.params["roomID"];
+  
+  console.log(`Connection added to poll for room ${roomID}. Response will be sent to client upon game start.`);
+  
+  if(typeof responsePoll[roomID] === "undefined")
+    responsePoll[roomID] = [];
+  
+  responsePoll[roomID].push(res);
+}
+
+async function processResponsePoll(roomID)
+{
+  const room = await Room.findOne({ deckID: roomID });
+
+  // If the game is started, go through each item in the responsePoll with the same roomID and send a start response.
+  // if(room.started)
+    for(let res of (responsePoll[roomID] || []))
+    {
+      console.log(true);
+      res.status(200).json(true);
+    }
+    
+  responsePoll[roomID] = undefined;
 }
