@@ -41,7 +41,9 @@ function RoomControls(props)
   {
     const status = await roomService.leaveRoom(room, user);
     if(status)
+    {
       setRoom(null);
+    }
   }
 
   return (

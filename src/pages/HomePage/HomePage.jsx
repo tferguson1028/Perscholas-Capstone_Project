@@ -67,7 +67,7 @@ function HomePage(props)
         <button onClick={handleRoomCreate}>Create Room</button>
         <form onSubmit={handleRoomJoin}>
           <button type="submit">Join Room</button>
-          <input type="text" name="room" id="room" onChange={handleChange} />
+          <input type="text" name="room" id="room" onChange={handleChange} required="true"/>
         </form>
         <span>{/* Spacer */}</span>
         <button onClick={handleLogOut}>Log Out</button>

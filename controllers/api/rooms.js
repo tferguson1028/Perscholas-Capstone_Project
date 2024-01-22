@@ -33,6 +33,7 @@ async function joinRoomDispatch(req)
 {
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
+  if(!room) return false;
   
   console.log("Joining room: ", room);
   if(room.started) return false;
@@ -95,10 +96,13 @@ async function startGameDispatch(req)
 
 async function getUsersDispatch(req)
 {
-  
-  const roomID = req.params["roomID"];
+  const roomID = req.params["roomID"];   
   const room = await Room.findOne({ deckID: roomID });
+  if(!room) return false;
+  
   const userIDArr = room.connectedUserIDs;
+  
+  if(room.started) return false;
   
   let users = [];
   for(let userID of userIDArr)

@@ -37,7 +37,7 @@ function GameVisuals(props)
         {
           (Object.keys(data.cardData.piles)).map((pile) =>
           {
-            if(pile === user || pile === "community") return <></>;
+            if(pile === user._id || pile === "community") return <></>;
             return (
               // Array statement: https://stackoverflow.com/a/28599347
               <CardHandDisplay key={pile} hand={Array.apply(null, Array(data.cardData.piles[pile].remaining)).map(() => {})} />

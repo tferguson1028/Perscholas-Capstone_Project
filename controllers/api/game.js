@@ -188,10 +188,12 @@ async function updateQueue(roomID)
 async function dealCards(roomID, turnQueue = [], amount = 1)
 {
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
-  for(let player of [...turnQueue].flat())
+  let select = 0;
+  for(let card of cards.cards)
   {
-    let card = cards.cards.pop().code;
-    await cardsAPI.addToPlayerHand(roomID, player, card);
+    let cardCode = card.code;
+    await cardsAPI.addToPlayerHand(roomID, turnQueue[select], cardCode);
+    select = (select+1)%amount;
   }
 }
 

@@ -11,7 +11,7 @@
 
 .CardHandDisplay > .HandSmall:not(:first-child)
 {
-  margin-left: -35%;
+  margin-left: -2.5em;
 }
 
 .HandLarge
