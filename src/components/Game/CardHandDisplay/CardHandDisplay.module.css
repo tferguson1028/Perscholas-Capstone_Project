@@ -5,14 +5,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  border: 2px solid green !important;
   
   width: min-content;
-}
-
-.CardHandDisplay > *
-{
-  border: 2px solid black;
 }
 
 .CardHandDisplay > .HandSmall:not(:first-child)
