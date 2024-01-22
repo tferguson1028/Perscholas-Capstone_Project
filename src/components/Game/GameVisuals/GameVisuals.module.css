@@ -1,0 +1,86 @@
+.GameVisuals
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.GameVisuals > .GameInfo
+{
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary-vibrant-950);
+
+  z-index: 100;
+}
+
+.GameVisuals > .GameInfo > div
+{
+  flex: 1;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+  padding: 4px 8px;
+  background-color: #0000003A;
+  align-items: center;
+}
+
+.GameVisuals > .GameInfo > div:last-child
+{
+  flex: 1.6;
+}
+
+.GameVisuals > .GameInfo > span
+{
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-primary-800);
+}
+
+.GameVisuals > .GameInfo > div > span
+{
+  text-align: center;
+  color: var(--color-mono-100);
+  text-shadow: 0 -1px 0px var(--color-mono-500);
+  font-size: clamp(10pt, 3vmin, 15pt);
+  height: 100%;
+}
+
+.GameVisuals > .GameInfo > div > span:nth-child(1)
+{
+  font-weight: bold;
+  color: var(--color-primary-800);
+  font-size: clamp(12pt, 4.5vmin, 16pt);
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.CommunityPile
+{
+  /* height: 35vh; */
+  flex: 1;
+  border: 4px solid black;
+}
+
+.PlayerHands
+{
+  flex: 1;
+  display: grid;
+  /* grid-template-columns: repeat(4, auto); */
+  grid-auto-flow: column;
+  align-items: end;
+}
+
+.PlayerHands > *
+{
+  border: 1px solid blue;
+  /* display: flex; */
+  /* justify-content: end; */
+  /* align-items: flex-end; */
+}
+

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import * as roomService from "../../../utilities/room-service";
 import * as gameService from "../../../utilities/game-service";
 
+import styles from "./GameControls.module.css";
+
 function GameControls(props)
 {
   const { user, room, setRoom } = props;
@@ -19,12 +21,18 @@ function GameControls(props)
   async function doAction(actionPayload)
   {
     const response = await gameService.sendAction(room, user, actionPayload);
-    response ? setError("") : setError("Wait your turn");
+    if(response)
+      setError("")
+    else
+    {
+      setError("Wait your turn");
+      setTimeout(() => {setError("");}, 5000);
+    }
   }
 
   return (
-    <section>
-      {error.length > 0 ? <div><p>{error}</p></div> : <></>}
+    <section className={styles.GameControls}>
+      {error.length > 0 ? <p className='ErrorMessage'>{error}</p> : <></>}
       <div>
         <button onClick={() => { doAction({ action: "check" }); }}>Check</button>
         <button onClick={() => { doAction({ action: "call" }); }}>Call</button>

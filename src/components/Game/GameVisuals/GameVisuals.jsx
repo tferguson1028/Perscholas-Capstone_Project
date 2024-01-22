@@ -1,27 +1,36 @@
 import React from 'react';
 import CardHandDisplay from '../CardHandDisplay/CardHandDisplay';
 
+import styles from "./GameVisuals.module.css";
+
 function GameVisuals(props) 
 {
   const { user, gameData = { data: { cardData: { piles: {} } }, playerCards: [], community: [] } } = props;
   const { data, playerCards, community } = gameData;
   return (
-    <div>
-      <div className="pot-and-bets">
+    <div className={styles.GameVisuals}>
+      <section className={styles.GameInfo}>
         <div>
-          <span>&#128176;</span>
-          <span>POT {data.pot}</span>
+          <span>&#128176;POT</span>
+          <span>{data.pot}</span>
         </div>
+        <span className='spacer'></span>
         <div>
-          <span>&#x1FA99;</span>
-          <span>BET {data.lastBet}</span>
+          <span>&#x1FA99;BET</span>
+          <span>{data.lastBet}</span>
         </div>
-        <div>TURN {data.currentTurn}</div>
-      </div>
-      <div className="community-pile">
+        <span className='spacer'></span>
+        <div>
+          <span>&#x1F449;TURN</span>
+          <span>
+            {data.currentTurn}
+          </span>
+        </div>
+      </section>
+      <div className={styles.CommunityPile}>
         <CardHandDisplay hand={community} />
       </div>
-      <div className="player-hands">
+      <div className={styles.PlayerHands}>
         <div className='player'>
           <CardHandDisplay hand={playerCards} />
         </div>
@@ -29,9 +38,8 @@ function GameVisuals(props)
           (Object.keys(data.cardData.piles)).map((pile) =>
           {
             if(pile === user || pile === "community") return <></>;
-
-            // https://stackoverflow.com/a/28599347
             return (
+              // Array statement: https://stackoverflow.com/a/28599347
               <CardHandDisplay key={pile} hand={Array.apply(null, Array(data.cardData.piles[pile].remaining)).map(() => {})} />
             );
           })

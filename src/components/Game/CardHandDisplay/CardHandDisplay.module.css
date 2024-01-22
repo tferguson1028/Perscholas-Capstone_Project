@@ -1,0 +1,33 @@
+.CardHandDisplay
+{
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border: 2px solid green !important;
+  
+  width: min-content;
+}
+
+.CardHandDisplay > *
+{
+  border: 2px solid black;
+}
+
+.CardHandDisplay > .HandSmall:not(:first-child)
+{
+  margin-left: -35%;
+}
+
+.HandLarge
+{
+  display: flex;
+  height: clamp(96px, 24vmin, 256px);
+}
+
+.HandSmall
+{
+  display: flex;
+  height: clamp(96px, 12vmin, 256px);
+}

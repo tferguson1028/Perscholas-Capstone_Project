@@ -1,0 +1,17 @@
+.GamePage
+{
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.GamePage > section > code
+{
+  font-weight: bold;
+  color: var(--color-primary-900);
+}
+
+.GamePage > div
+{
+  flex: 5;
+}

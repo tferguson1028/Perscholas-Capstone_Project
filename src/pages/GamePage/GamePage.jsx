@@ -4,6 +4,8 @@ import GameControls from '../../components/Game/GameControls/GameControls';
 
 import * as gameService from "../../utilities/game-service";
 
+import styles from "./GamePage.module.css";
+
 function GamePage(props) 
 {
   const { user, room, setRoom } = props;
@@ -14,7 +16,7 @@ function GamePage(props)
   {
     updateGame();
     console.log(gameData);
-    alert(JSON.stringify(gameData));
+    // alert(JSON.stringify(gameData));
   }, [gameData]);
 
   async function startGame() { gameService.startGame(room); }
@@ -41,9 +43,10 @@ function GamePage(props)
   }
 
   return (
-    <main>
+    <main className={styles.GamePage}>
       <section>
-        <h1>Game {room}</h1>
+        <h1>Game</h1>
+        <code>{room}</code>
       </section>
       <GameVisuals gameData={gameData} />
       <GameControls user={user} room={room} setRoom={setRoom} />
