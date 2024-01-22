@@ -45,10 +45,10 @@ function RoomControls(props)
   }
 
   return (
-    <div>
+    <>
       <button onClick={startGame}>Start Game</button>
       <button onClick={leaveRoom}>Leave Room</button>
-    </div>
+    </>
   );
 }
 

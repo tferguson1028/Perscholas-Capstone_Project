@@ -27,11 +27,11 @@ function RoomPage(props)
       <section>
         <h1>Waiting Room</h1>
         <code>{room}</code>
+        {error ? <p className='ErrorMessage'>{error}</p> : <></>}
       </section>
       <RoomStatus user={user} users={userList} />
       <section>
         <RoomControls user={user} room={room} setRoom={setRoom} setError={setError} />
-        {error ? <p className='error'>{error}</p> : <></>}
       </section>
     </main>
   );
