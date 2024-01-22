@@ -58,13 +58,6 @@
   flex: 1;
 }
 
-.HomePage .InputSection > *:nth-child(2) > button {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
 .HomePage .InputSection > *:nth-child(2) > input {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   flex: 1;
 }

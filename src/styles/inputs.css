@@ -43,3 +43,17 @@ input
   color: var(--color-mono-0);
   background-color: var(--color-background-900);
 }
+
+/* https://www.w3schools.com/css/css_combinators.asp */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/:has */
+button:has(+ input)
+{
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+button:has(+ input) + input
+{
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

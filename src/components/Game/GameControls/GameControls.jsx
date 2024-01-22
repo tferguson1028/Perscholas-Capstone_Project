@@ -7,7 +7,7 @@ import styles from "./GameControls.module.css";
 
 function GameControls(props)
 {
-  const { user, room, setRoom } = props;
+  const { user, room, setRoom, pot = 0, lastBet = 0 } = props;
   const [error, setError] = useState("");
   const [value, setValue] = useState(0);
 
@@ -22,23 +22,42 @@ function GameControls(props)
   {
     const response = await gameService.sendAction(room, user, actionPayload);
     if(response)
-      setError("")
+      setError("");
     else
     {
       setError("Wait your turn");
-      setTimeout(() => {setError("");}, 5000);
+      setTimeout(() => { setError(""); }, 5000);
     }
+  }
+
+  function handleChange(event)
+  {
+    event.preventDefault();
+    setValue(event.target.value);
+  }
+
+  function handleSubmit(event)
+  {
+    event.preventDefault();
+    doAction({ action: "raise", amount: Number(value) });
   }
 
   return (
     <section className={styles.GameControls}>
       {error.length > 0 ? <p className='ErrorMessage'>{error}</p> : <></>}
       <div>
-        <button onClick={() => { doAction({ action: "check" }); }}>Check</button>
-        <button onClick={() => { doAction({ action: "call" }); }}>Call</button>
-        <form onSubmit={(event) => { event.preventDefault(); doAction({ action: "raise", amount: value }); }}>
+        { 
+          lastBet === 0 ?
+          (
+            pot === 0 ?
+            <></> :
+            <button onClick={() => { doAction({ action: "check" }); }}>Check</button>
+          ) :
+          <button onClick={() => { doAction({ action: "call" }); }}>Call</button>
+        }
+        <form onSubmit={handleSubmit}>
           <button type="submit">Raise</button>
-          <input onChange={(event) => { setValue(event.target.value); }} type="number" name="raise" id="raise" required="true"/>
+          <input onChange={handleChange} type="number" name="raise" id="raise" min="0" required="true" />
         </form>
         <button onClick={() => { doAction({ action: "fold" }); }}>Fold</button>
         <button onClick={leaveRoom}>Leave</button>

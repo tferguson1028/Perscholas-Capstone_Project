@@ -54,13 +54,13 @@ async function playerActionDispatch(req)
 
   let users = room.connectedUserIDs;
   let turnsDone = room.turnsDone + 1;
-  await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
   
   if(turnsDone >= users.length)
   {
     await Room.updateOne({ _id: room._id }, { turnsDone: 0 }); // Reset turn counter each round.
     await nextRound(roomID);
-  }
+  }else
+    await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
 
   processResponsePoll(roomID);
   return response;
@@ -117,7 +117,7 @@ async function nextRound(roomID)
     await dealCards(roomID, ["community"], 1);
   }
 
-  await Room.updateOne({ _id: room._id }, { turnsDone: room.turnsDone + 1 });
+  await Room.updateOne({ _id: room._id }, { lastBet: 0 });
 }
 
 async function nextHand(roomID)
@@ -164,8 +164,8 @@ async function updateGameState(roomID, userID, action)
   {
     case "check": break;
     case "call": addToPot(roomID, userID, lastBet); break;
-    case "raise": addToPot(roomID, userID, action.value); break;
-    case "fold": break;
+    case "raise": addToPot(roomID, userID, action.amount, true); break;
+    case "fold": /*TODO Remove from turnQueue until next hand*/break;
     default: return false;
   }
   return true;
@@ -223,14 +223,20 @@ async function clearPiles(roomID)
   await cardsAPI.returnDiscarded(roomID);
 }
 
-async function addToPot(roomID, userID, amount = 0)
+async function addToPot(roomID, userID, amount = 0, raise = false)
 {
   const room = await Room.findOne({ deckID: roomID });
   const user = await User.findOne({ _id: userID });
   let potValue = amount + room.pot;
   let userValue = user.money - amount;
+  
+  let bet = amount;
+  if(raise)
+    bet = room.lastBet + amount;
+  
+  console.log(`Adding ${amount} to pot`);
 
-  await Room.updateOne({ _id: room._id }, { pot: potValue });
+  await Room.updateOne({ _id: room._id }, { pot: potValue, lastBet: bet });
   await User.updateOne({ _id: userID }, { money: userValue });
 }
 

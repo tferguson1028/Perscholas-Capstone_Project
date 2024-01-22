@@ -49,7 +49,7 @@ function GamePage(props)
         <code>{room}</code>
       </section>
       <GameVisuals user={user} gameData={gameData} />
-      <GameControls user={user} room={room} setRoom={setRoom} />
+      <GameControls user={user} room={room} setRoom={setRoom} pot={gameData.data.pot} lastBet={gameData.data.lastBet} />
     </main>
   );
 }

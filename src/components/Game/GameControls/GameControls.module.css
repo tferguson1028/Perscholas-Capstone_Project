@@ -22,21 +22,8 @@
   align-items: center;
 }
 
-.GameControls > div > *:nth-child(3)
+.GameControls > div > *:nth-child(2)
 {
   white-space: nowrap;
 }
-
-.GameControls > div > *:nth-child(3) > button
-{
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.GameControls > div > *:nth-child(3) > input
-{
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
 
