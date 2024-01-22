@@ -59,7 +59,7 @@ function GameControls(props)
           <button type="submit">Raise</button>
           <input onChange={handleChange} type="number" name="raise" id="raise" min="0" required="true" />
         </form>
-        <button onClick={() => { doAction({ action: "fold" }); }}>Fold</button>
+          { pot > 0 ? <button onClick={() => { doAction({ action: "fold" }); }}>Fold</button> : <></> }
         <button onClick={leaveRoom}>Leave</button>
       </div>
     </section>

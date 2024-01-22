@@ -28,9 +28,6 @@ async function startDispatch(req)
   {
     await Room.updateOne({ _id: room._id }, { started: true });
     dealCards(roomID, room.turnQueue, 2);
-  } else
-  {
-    // nextRound(roomID);
   }
 
   processResponsePoll(roomID);
@@ -52,15 +49,15 @@ async function playerActionDispatch(req)
   console.log("Response_dispatch: ", response);
   updateQueue(roomID);
 
-  let users = room.connectedUserIDs;
+  let turnQueue = room.turnQueue;
   let turnsDone = room.turnsDone + 1;
-  
-  if(turnsDone >= users.length)
+  await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
+
+  if(turnsDone >= turnQueue.length)
   {
-    await Room.updateOne({ _id: room._id }, { turnsDone: 0 }); // Reset turn counter each round.
     await nextRound(roomID);
-  }else
-    await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
+    await Room.updateOne({ _id: room._id }, { turnsDone: 0 }); // Reset turn counter each round.
+  }
 
   processResponsePoll(roomID);
   return response;
@@ -72,7 +69,7 @@ async function getUpdateDispatch(req)
   const room = await Room.findOne({ deckID: roomID });
   const cardData = await cardsAPI.viewPlayerHand(roomID, "All");
   const currentTurn = await User.findById(room.turnQueue[0]);
-  
+
   return {
     pot: room.pot,
     lastBet: room.lastBet,
@@ -86,14 +83,14 @@ async function getCardsDispatch(req)
 {
   const roomID = req.params["roomID"];
   const userID = req.params["userID"]; // Don't peak
-  
-  console.log("Cards from ", roomID+"/"+userID);
+
+  console.log("Cards from ", roomID + "/" + userID);
 
   const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
   const pile = gameData["piles"][userID];
-  
+
   console.log(pile);
-  
+
   if(pile)
     return pile.cards;
   return [];
@@ -105,7 +102,10 @@ async function nextRound(roomID)
   const room = await Room.findOne({ deckID: roomID });
   const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
   const communityPile = gameData.piles["community"].cards || [];
-  if(communityPile.length >= 5 || (room.turnsDone === room.turnQueue.length && room.lastBet === 0))
+  if(
+    communityPile.length >= 5 ||
+    room.turnQueue.length <= 1 ||
+    (room.turnsDone >= room.turnQueue.length && room.lastBet <= 0))
   {
     // Hand is over if no one raised the bet.
     await nextHand(roomID);
@@ -154,18 +154,22 @@ async function evaluateHand(hand = [])
 
 }
 
-async function updateGameState(roomID, userID, action)
+async function updateGameState(roomID, userID, actionPayload)
 {
   const room = await Room.findOne({ deckID: roomID });
   const lastBet = room.lastBet;
 
-  console.log(action);
-  switch(action.action)
+  console.log(actionPayload);
+  switch(actionPayload.action)
   {
     case "check": break;
     case "call": addToPot(roomID, userID, lastBet); break;
-    case "raise": addToPot(roomID, userID, action.amount, true); break;
-    case "fold": /*TODO Remove from turnQueue until next hand*/break;
+    case "raise": addToPot(roomID, userID, actionPayload.amount, true); break;
+    case "fold":
+      let turnQueue = room.turnQueue;
+      turnQueue.splice(turnQueue.indexOf(userID), 1);
+      await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+      break;
     default: return false;
   }
   return true;
@@ -190,16 +194,16 @@ async function updateQueue(roomID)
 async function dealCards(roomID, turnQueue = [], amount = 1)
 {
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
-  
+
   console.log("\n***** Dealing Cards: ", cards);
-  
+
   let select = 0;
   for(let card of cards.cards)
   {
     let cardCode = card.code;
     await cardsAPI.addToPlayerHand(roomID, turnQueue[select], cardCode);
     console.log("dealt:", cardCode, "to", turnQueue[select]);
-    select = (select+1)%turnQueue.length;
+    select = (select + 1) % turnQueue.length;
   }
 }
 
@@ -229,11 +233,11 @@ async function addToPot(roomID, userID, amount = 0, raise = false)
   const user = await User.findOne({ _id: userID });
   let potValue = amount + room.pot;
   let userValue = user.money - amount;
-  
+
   let bet = amount;
   if(raise)
     bet = room.lastBet + amount;
-  
+
   console.log(`Adding ${amount} to pot`);
 
   await Room.updateOne({ _id: room._id }, { pot: potValue, lastBet: bet });
