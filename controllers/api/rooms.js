@@ -137,20 +137,19 @@ function newRoom(cardAPIData)
 
 async function initializeRoom(roomID, turnQueue = [])
 {
-  let gameData = await cardsAPI.drawFromDeck(roomID, 1);
-  let card = gameData.cards[0].code;
-  
-  await cardsAPI.addToPlayerHand(roomID, "community", card);
-  await cardsAPI.returnPlayerHandToDeck(roomID, "community");
-
+  turnQueue.push("community");
   for(let userID of turnQueue)
   {
-    let gameData = await cardsAPI.drawFromDeck(roomID, 1);
-    let card = gameData.cards[0].code;
+    let drawData = await cardsAPI.drawFromDeck(roomID, 1);
+    let card = drawData.cards[0].code;
     
     await cardsAPI.addToPlayerHand(roomID, userID, card);
-    await cardsAPI.returnPlayerHandToDeck(roomID, userID);
   }
+  
+  let gameData = await cardsAPI.viewPlayerHand(roomID, "all");
+  let piles = gameData.piles;
+  for(let pile of Object.keys(piles))
+    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
   
   console.log("Room initialization complete");
 }
