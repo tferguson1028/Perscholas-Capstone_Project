@@ -53,14 +53,15 @@ async function playerActionDispatch(req)
   updateQueue(roomID);
 
   let users = room.connectedUserIDs;
-  let turnsDone = room.turnsDone;
+  let turnsDone = room.turnsDone + 1;
+  await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
+  
   if(turnsDone >= users.length)
   {
-    turnsDone = -1; // Reset turn counter each round.
+    await Room.updateOne({ _id: room._id }, { turnsDone: 0 }); // Reset turn counter each round.
     await nextRound(roomID);
   }
 
-  await Room.updateOne({ _id: room._id }, { turnsDone: (turnsDone + 1) });
   processResponsePoll(roomID);
   return response;
 }
@@ -104,7 +105,7 @@ async function nextRound(roomID)
   const room = await Room.findOne({ deckID: roomID });
   const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
   const communityPile = gameData.piles["community"].cards || [];
-  if(communityPile.length >= 5 || (room.turnsDone > 0 && room.lastBet === 0))
+  if(communityPile.length >= 5 || (room.turnsDone === room.turnQueue.length && room.lastBet === 0))
   {
     // Hand is over if no one raised the bet.
     await nextHand(roomID);
@@ -125,7 +126,7 @@ async function nextHand(roomID)
   const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
   const piles = cardData.piles || {};
   let bestHand = Number.MIN_SAFE_INTEGER;
-  let currentWinner = "house :P";
+  let currentWinner = "house";
   for(let pile in piles)
   {
     const player = await cardsAPI.viewPlayerHand(roomID, pile);
@@ -198,7 +199,7 @@ async function dealCards(roomID, turnQueue = [], amount = 1)
     let cardCode = card.code;
     await cardsAPI.addToPlayerHand(roomID, turnQueue[select], cardCode);
     console.log("dealt:", cardCode, "to", turnQueue[select]);
-    select = (select+1)%amount;
+    select = (select+1)%turnQueue.length;
   }
 }
 
