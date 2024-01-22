@@ -148,6 +148,7 @@ async function nextHand(roomID)
 
 async function evaluateHand(hand = [])
 {
+  return 0;
   const handRank = func();
 
 }
@@ -188,11 +189,15 @@ async function updateQueue(roomID)
 async function dealCards(roomID, turnQueue = [], amount = 1)
 {
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
+  
+  console.log("\n***** Dealing Cards: ", cards);
+  
   let select = 0;
   for(let card of cards.cards)
   {
     let cardCode = card.code;
     await cardsAPI.addToPlayerHand(roomID, turnQueue[select], cardCode);
+    console.log("dealt:", cardCode, "to", turnQueue[select]);
     select = (select+1)%amount;
   }
 }
