@@ -13,9 +13,13 @@ function GameControls(props)
 
   async function leaveRoom()
   {
-    const status = await roomService.leaveRoom(room, user);
-    if(status)
-      setRoom(null);
+    const response = await doAction({ action: "fold" });
+    if(response)
+    {
+      const status = await roomService.leaveRoom(room, user);
+      if(status)
+        setRoom(null);
+    }
   }
 
   async function doAction(actionPayload)
@@ -25,7 +29,7 @@ function GameControls(props)
       setError("");
     else
     {
-      setError("Wait your turn");
+      setError("Please wait until it is your turn");
       setTimeout(() => { setError(""); }, 5000);
     }
   }
