@@ -10,6 +10,8 @@ A full-stack React app where you can play poker with multiple people.
 Users can securely sign up and login to the application and begin playing. 
 Every user gets 100,000 tokens to use for the game and no real money is used for the game.
 
+Multiple games can run simultaniously and games will continue running indefinately.
+
 ## Getting Started
 [Trello Board](https://trello.com/b/gZqUsYnR/perscholas-capstone)
 
@@ -57,6 +59,7 @@ time than necessary learning how to implement a web sockets package that I have 
 - Server functions had to be slowed down due to API calls responding before they finished, so player actions are not that responsive
 - Server will likely crash if multiple actions are submitted in similar time frames
 - Server can hang sometimes and needs to be manually reset
+- Creating rooms is bugged, user will not actually join the room upon creation; they must leave and re-join
 - Leaving rooms sometimes does not work and I can't figure out why
 - Users can play while having negative currency
 - Some values on the screen do not update
@@ -64,8 +67,14 @@ time than necessary learning how to implement a web sockets package that I have 
 - Missing room list on home page
 
 ## Future Enhancements
-- Replace long polling system with web sockets for better user experience
-- Attempt to find a way to speed server interactions
-- Put a limit on the amount of people that can join a game
-- Better user interface
-- Delete empty rooms
+- Code Enhancements
+  - Replace long polling system with web sockets for better user experience
+  - Speed up server interactions
+  - Put a limit on the amount of people that can join a game
+  - Put a round limit on games
+  - Delete empty rooms
+
+- UI Enhancements
+  - Show winners and losers
+  - Show player names under their hands
+  - Restructure layout to be more scalable and respondive 
