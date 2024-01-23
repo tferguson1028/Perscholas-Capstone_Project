@@ -11,7 +11,6 @@ function AuthenticationPage(props)
   const { setUser } = props;
   const [showLogin, setShowLogin] = useState(false);
 
-
   return (
     <main className={styles.AuthenticationPage}>
       <LogoSmall />

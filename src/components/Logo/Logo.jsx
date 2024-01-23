@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import styles from "./Logo.module.css";
 
@@ -12,7 +12,7 @@ function Logo()
         <span className={styles.LogoSuit}>♣</span>
         <span className={styles.LogoSuit}>♦</span>
       </div>
-      <h1>Card Site</h1>
+      <h1 style={{ fontFamily: "Georgia" }}>PLAY ACE</h1>
     </div>
   );
 }
