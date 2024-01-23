@@ -8,6 +8,7 @@ const Room = require("../../models/room");
 const User = require("../../models/user");
 
 const cardsAPI = require("./cardsFetchAPI");
+const rankHand = require("./rankHand");
 
 //# Exported Methods
 module.exports = { start, doAction, getUpdate, awaitUpdate, getCards };
@@ -41,14 +42,10 @@ async function playerActionDispatch(req)
   const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
   if(!playerTurn) return false;
 
-  console.log(req.body["user"]);
-  console.log(req.body["action"]);
   let response = await updateGameState(roomID, req.body["user"]._id, req.body["action"]);
   if(!response) return false;
 
-  console.log("Response_dispatch: ", response);
   updateQueue(roomID);
-
   let turnQueue = room.turnQueue;
   let turnsDone = room.turnsDone + 1;
   await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
@@ -89,7 +86,7 @@ async function getCardsDispatch(req)
   const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
   const pile = gameData["piles"][userID];
 
-  console.log(pile);
+  // console.log(pile);
 
   if(pile)
     return pile.cards;
@@ -123,35 +120,47 @@ async function nextRound(roomID)
 async function nextHand(roomID)
 {
   const room = await Room.findOne({ deckID: roomID });
-  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
-  const piles = cardData.piles || {};
+  const piles = room.turnQueue;
+
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "community");
+  const communityPile = cardData.piles["community"].cards;
+
   let bestHand = Number.MIN_SAFE_INTEGER;
   let currentWinner = "house";
-  for(let pile in piles)
-  {
-    const player = await cardsAPI.viewPlayerHand(roomID, pile);
-    const hand = player.cards;
-    const handRank = evaluateHand(hand);
 
-    if(bestHand < handRank)
+  if(communityPile.length < 5) await dealCards(roomID, ["community"], 5 - communityPile.length);
+
+  console.log("\n***** GETTING HAND EVALUATIONS: ");
+  for(let pile of piles)
+  {
+    const handRank = await getHandRank(roomID, pile);
+    console.log(pile, "rank", handRank);
+
+    if(bestHand < handRank.value)
     {
-      bestHand = handRank;
+      bestHand = handRank.value;
       currentWinner = pile;
     }
   }
 
+  await processResponsePoll(roomID);
+
   const turnQueue = shuffleArray(room.connectedUserIDs);
+  console.log(turnQueue);
+
   await emptyPotTo(roomID, currentWinner);
   await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, turnsDone: 0 });
-  await clearPiles(roomID);
-  await dealCards(roomID, turnQueue, 2);
-}
+  
+  // Gotta slow down the processes :(
+  setTimeout(async () => {
+    await clearPiles(roomID);
+  }, 3000);
 
-async function evaluateHand(hand = [])
-{
-  return 0;
-  const handRank = func();
-
+  setTimeout(async () =>
+  {
+    await dealCards(roomID, turnQueue, 2);
+    await processResponsePoll(roomID);
+  }, 5000);
 }
 
 async function updateGameState(roomID, userID, actionPayload)
@@ -188,14 +197,14 @@ async function updateQueue(roomID)
   const turnQueue = room.turnQueue;
 
   turnQueue.push(turnQueue.shift());
-  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+  await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
 }
 
 async function dealCards(roomID, turnQueue = [], amount = 1)
 {
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
 
-  console.log("\n***** Dealing Cards: ", cards);
+  console.log("\n***** Dealing Cards: ");
 
   let select = 0;
   for(let card of cards.cards)
@@ -209,8 +218,17 @@ async function dealCards(roomID, turnQueue = [], amount = 1)
 
 async function getHandRank(roomID, userID)
 {
-  const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
-  let cards = gameData.piles[userID].cards || [];
+  let playerHand = await cardsAPI.viewPlayerHand(roomID, userID);
+  playerHand = playerHand.piles[userID].cards;
+  playerHand = playerHand.map((card) => { return card.code; });
+  console.log("Player hand (codes): ", playerHand);
+
+  let communityHand = await cardsAPI.viewPlayerHand(roomID, "community");
+  communityHand = communityHand.piles["community"].cards;
+  communityHand = communityHand.map((card) => { return card.code; });
+  console.log("Community hand (codes): ", communityHand);
+
+  return rankHand(playerHand, communityHand);
 }
 
 async function clearPiles(roomID)
@@ -219,12 +237,15 @@ async function clearPiles(roomID)
   const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
   const piles = cardData.piles || {};
 
+  console.log("\n****** CLEARING CARDS");
+
   // for-in returns a key, which is the name of the pile in the api
   // awaiting to allow function to complete before doing multiple api calls.
   for(let pile in piles)
     await cardsAPI.returnPlayerHandToDeck(roomID, pile);
 
   await cardsAPI.returnDiscarded(roomID);
+  await cardsAPI.reshuffleDeck(roomID);
 }
 
 async function addToPot(roomID, userID, amount = 0, raise = false)

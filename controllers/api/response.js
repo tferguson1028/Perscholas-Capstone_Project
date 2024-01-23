@@ -5,7 +5,7 @@ async function respond(req, res, dispatch = () => {})
   try
   {
     const json = await dispatch(req, res);
-    console.log("Response: ", json);
+    // console.log("Response: ", json);
     res.status(200).json(json);
   } catch (exception)
   {
