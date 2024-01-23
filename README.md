@@ -1,7 +1,7 @@
 <img src="./public/logo_image.png" alt="Play Ace Logo" width="100%" />
-<span><img src="./public/demo_image_0.png" alt="Home Page" width="32%"></span>
-<span><img src="./public/demo_image_1.png" alt="Game Page" width="32%"></span>
-<span><img src="./public/demo_image_2.png" alt="Waiting Room Page" width="32%"></span>
+<span><img src="./public/demo_image_0.png" alt="Home Page" width="32.5%"></span>
+<span><img src="./public/demo_image_1.png" alt="Game Page" width="32.5%"></span>
+<span><img src="./public/demo_image_2.png" alt="Waiting Room Page" width="32.5%"></span>
 </br>
 
 # Play Ace - Free Online Poker
