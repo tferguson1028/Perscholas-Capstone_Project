@@ -18,6 +18,8 @@ const ensureLoggedIn = require('./config/ensureLoggedIn');
 
 // Check if token and create req.user
 app.use('/api/users', require('./routes/api/users'));
+app.use("/api/rooms", ensureLoggedIn, require("./routes/api/rooms"));
+app.use("/api/game", ensureLoggedIn, require("./routes/api/game"));
 // Protect the API routes below from anonymous users
 // app.use('/api/items', ensureLoggedIn, require('./routes/api/items'));
 // app.use('/api/orders', ensureLoggedIn, require('./routes/api/orders'));

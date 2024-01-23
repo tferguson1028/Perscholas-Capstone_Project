@@ -42,7 +42,7 @@ export default class SignUpForm extends Component
     {
       console.log(error);
       this.setState({
-        error: "Sign Up Failed - Try Again"
+        error: "Sign Up Failed - Please Try Again"
       });
     }
   };
@@ -57,8 +57,8 @@ export default class SignUpForm extends Component
           <h1>Sign Up</h1>
         </header>
         <div className="form-container">
-          {this.state.error.length > 0 ? <p className="error-message">{this.state.error}</p> : <></>}
-          <form autoComplete="off" onSubmit={this.handleSubmit} style={{ margin: "1em" }}>
+          {this.state.error.length > 0 ? <code className={styles.ErrorMessage}>{this.state.error}</code> : <></>}
+          <form autoComplete="off" onSubmit={this.handleSubmit} >
             <label htmlFor="name">Username</label>
             <input
               type="text"

@@ -1,0 +1,29 @@
+.GameControls
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.GameControls > *
+{
+  flex: 1;
+}
+
+
+.GameControls > div
+{
+  display: flex;
+  flex-direction: row;
+  
+  flex-wrap: nowrap;
+  
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.GameControls > div > *:nth-child(2)
+{
+  white-space: nowrap;
+}
+

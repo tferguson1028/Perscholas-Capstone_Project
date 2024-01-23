@@ -1,0 +1,63 @@
+.HomePage {
+  display: flex;
+  flex-direction: column;
+}
+
+.HomePage .RoomList {
+  flex: 1;
+}
+
+.HomePage .InputSection,
+.HomePage .UserDisplay {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  justify-content: space-evenly;
+}
+
+.HomePage .UserDisplay > *:not(button) {
+  display: flex;
+  align-items: center;
+
+  color: var(--color-primary-vibrant-950);
+  font-weight: bold;
+
+  background-color: var(--color-primary-200);
+  padding: 6px;
+  margin: 0;
+  /* justify-content: center; */
+}
+
+.HomePage .UserDisplay > *:nth-child(2) {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+}
+
+.HomePage .UserDisplay > *:nth-child(2) > *:nth-child(2) {
+  flex: 1;
+  background-color: var(--color-tertiary-950);
+  padding: 4px 8px;
+  margin: -3px;
+  border-radius: 0.2rem;
+  color: var(--color-primary-vibrant-600);
+
+  letter-spacing: 3px;
+}
+
+
+.HomePage .InputSection > *:nth-child(2) {
+  flex: 3;
+  white-space: nowrap;
+  display: flex;
+  gap: 0;
+}
+
+.HomePage .InputSection > *:nth-child(3) {
+  flex: 1;
+}
+
+.HomePage .InputSection > *:nth-child(2) > input {
+  flex: 1;
+}

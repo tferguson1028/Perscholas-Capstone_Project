@@ -1,4 +1,28 @@
 /* Variables */
+
+/*
+ Color Palette Base
+ 
+ Primary: #f0386b #ff5376 
+ Secondary: #6b2d5c
+ 
+ Background: #702632
+ 
+ Success: #54FF71
+ Warning: #FFD354
+ Info: #5475FF
+ Error: #FF1F2A
+ 
+ Beige: #e2c290
+ Grey: #40434e
+ Black: #080705
+ White: #fffffa
+*/
+
+
+/* Using https://www.tints.dev/ to generate shades */
 :root {
   --test-variable: 404;
+
+
 }

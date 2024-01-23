@@ -18,6 +18,8 @@ const userSchema = new Schema(
       minLength: 3,
       required: true,
     },
+    money: { type: Number, default: 100000 },
+    currentBet: { type: Number, default: 0 }
   },
   {
     timestamps: true,

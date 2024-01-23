@@ -1,0 +1,12 @@
+section
+{
+  padding: 12px;
+  margin-bottom: 12px;
+  
+  color: var(--color-mono-950);
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-950);
+  box-shadow:
+    0px 0px 0px 4px var(--color-primary-500),
+    0px 8px 0px 4px var(--color-primary-900);
+}

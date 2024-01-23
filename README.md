@@ -21,6 +21,12 @@ A list of all technologies, libraries, APIs, etc. used in the project.
   - JWT
   - Bcrypt
 
+## Additional Resources
+Poker hand ranker algorithm by [@subskybox](https://www.codeproject.com/Members/subskybox)
+
+Use's his code from his article on ranking poker hands using bitwise operations. [Article Link](https://www.codeproject.com/Articles/569271/A-Poker-hand-analyzer-in-JavaScript-using-bit-math).
+
+
 ## Getting Started
 Links to the project's planning (Trello board) and the deployed app.
 [Trello Board](https://trello.com/b/gZqUsYnR/perscholas-capstone)
