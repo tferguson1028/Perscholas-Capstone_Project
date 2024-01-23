@@ -17,6 +17,7 @@ function App()
   const [user, setUser] = useState(getUser());
   const [room, setRoom] = useState();
 
+  // Re-render on change to user or room code
   useEffect(() => {}, [room, user]);
 
   return (

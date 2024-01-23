@@ -41,14 +41,16 @@ function RoomControls(props)
   {
     const status = await roomService.leaveRoom(room, user);
     if(status)
+    {
       setRoom(null);
+    }
   }
 
   return (
-    <div>
+    <>
       <button onClick={startGame}>Start Game</button>
       <button onClick={leaveRoom}>Leave Room</button>
-    </div>
+    </>
   );
 }
 

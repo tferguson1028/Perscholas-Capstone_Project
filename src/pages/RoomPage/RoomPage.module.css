@@ -11,7 +11,26 @@
 }
 
 .RoomPage > *:nth-child(2)
-{
-  
+{ 
   flex: 1;
+}
+
+.RoomPage > section:first-child
+{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.RoomPage p
+{
+  margin: 0;
+}
+
+.RoomPage > section:last-child
+{
+  display: flex;
+  flex-direction: row;
+  
+  justify-content: space-between;
 }

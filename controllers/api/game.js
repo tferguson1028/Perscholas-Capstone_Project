@@ -8,6 +8,7 @@ const Room = require("../../models/room");
 const User = require("../../models/user");
 
 const cardsAPI = require("./cardsFetchAPI");
+const rankHand = require("./rankHand");
 
 //# Exported Methods
 module.exports = { start, doAction, getUpdate, awaitUpdate, getCards };
@@ -28,9 +29,6 @@ async function startDispatch(req)
   {
     await Room.updateOne({ _id: room._id }, { started: true });
     dealCards(roomID, room.turnQueue, 2);
-  } else
-  {
-    // nextRound(roomID);
   }
 
   processResponsePoll(roomID);
@@ -44,23 +42,20 @@ async function playerActionDispatch(req)
   const playerTurn = await checkPlayerTurn(roomID, req.body["user"]._id);
   if(!playerTurn) return false;
 
-  console.log(req.body["user"]);
-  console.log(req.body["action"]);
   let response = await updateGameState(roomID, req.body["user"]._id, req.body["action"]);
   if(!response) return false;
 
-  console.log("Response_dispatch: ", response);
   updateQueue(roomID);
+  let turnQueue = room.turnQueue;
+  let turnsDone = room.turnsDone + 1;
+  await Room.updateOne({ _id: room._id }, { turnsDone: turnsDone });
 
-  let users = room.connectedUserIDs;
-  let turnsDone = room.turnsDone;
-  if(turnsDone >= users.length)
+  if(turnsDone >= turnQueue.length)
   {
-    turnsDone = -1; // Reset turn counter each round.
     await nextRound(roomID);
+    await Room.updateOne({ _id: room._id }, { turnsDone: 0 }); // Reset turn counter each round.
   }
 
-  await Room.updateOne({ _id: room._id }, { turnsDone: (turnsDone + 1) });
   processResponsePoll(roomID);
   return response;
 }
@@ -71,7 +66,7 @@ async function getUpdateDispatch(req)
   const room = await Room.findOne({ deckID: roomID });
   const cardData = await cardsAPI.viewPlayerHand(roomID, "All");
   const currentTurn = await User.findById(room.turnQueue[0]);
-  
+
   return {
     pot: room.pot,
     lastBet: room.lastBet,
@@ -85,14 +80,14 @@ async function getCardsDispatch(req)
 {
   const roomID = req.params["roomID"];
   const userID = req.params["userID"]; // Don't peak
-  
-  console.log("Cards from ", roomID+"/"+userID);
+
+  console.log("Cards from ", roomID + "/" + userID);
 
   const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
   const pile = gameData["piles"][userID];
-  
-  console.log(pile);
-  
+
+  // console.log(pile);
+
   if(pile)
     return pile.cards;
   return [];
@@ -104,7 +99,10 @@ async function nextRound(roomID)
   const room = await Room.findOne({ deckID: roomID });
   const gameData = await cardsAPI.viewPlayerHand(roomID, "community");
   const communityPile = gameData.piles["community"].cards || [];
-  if(communityPile.length >= 5 || (room.turnsDone > 0 && room.lastBet === 0))
+  if(
+    communityPile.length >= 5 ||
+    room.turnQueue.length <= 1 ||
+    (room.turnsDone >= room.turnQueue.length && room.lastBet <= 0))
   {
     // Hand is over if no one raised the bet.
     await nextHand(roomID);
@@ -116,54 +114,71 @@ async function nextRound(roomID)
     await dealCards(roomID, ["community"], 1);
   }
 
-  await Room.updateOne({ _id: room._id }, { turnsDone: room.turnsDone + 1 });
+  await Room.updateOne({ _id: room._id }, { lastBet: 0 });
 }
 
 async function nextHand(roomID)
 {
   const room = await Room.findOne({ deckID: roomID });
-  const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
-  const piles = cardData.piles || {};
-  let bestHand = Number.MIN_SAFE_INTEGER;
-  let currentWinner = "house :P";
-  for(let pile in piles)
-  {
-    const player = await cardsAPI.viewPlayerHand(roomID, pile);
-    const hand = player.cards;
-    const handRank = evaluateHand(hand);
+  const piles = room.turnQueue;
 
-    if(bestHand < handRank)
+  const cardData = await cardsAPI.viewPlayerHand(roomID, "community");
+  const communityPile = cardData.piles["community"].cards;
+
+  let bestHand = Number.MIN_SAFE_INTEGER;
+  let currentWinner = "house";
+
+  if(communityPile.length < 5) await dealCards(roomID, ["community"], 5 - communityPile.length);
+
+  console.log("\n***** GETTING HAND EVALUATIONS: ");
+  for(let pile of piles)
+  {
+    const handRank = await getHandRank(roomID, pile);
+    console.log(pile, "rank", handRank);
+
+    if(bestHand < handRank.value)
     {
-      bestHand = handRank;
+      bestHand = handRank.value;
       currentWinner = pile;
     }
   }
 
+  await processResponsePoll(roomID);
+
   const turnQueue = shuffleArray(room.connectedUserIDs);
+  console.log(turnQueue);
+
   await emptyPotTo(roomID, currentWinner);
   await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue, turnsDone: 0 });
-  await clearPiles(roomID);
-  await dealCards(roomID, turnQueue, 2);
+  
+  // Gotta slow down the processes :(
+  setTimeout(async () => {
+    await clearPiles(roomID);
+  }, 3000);
+
+  setTimeout(async () =>
+  {
+    await dealCards(roomID, turnQueue, 2);
+    await processResponsePoll(roomID);
+  }, 5000);
 }
 
-async function evaluateHand(hand = [])
-{
-  const handRank = func();
-
-}
-
-async function updateGameState(roomID, userID, action)
+async function updateGameState(roomID, userID, actionPayload)
 {
   const room = await Room.findOne({ deckID: roomID });
   const lastBet = room.lastBet;
 
-  console.log(action);
-  switch(action.action)
+  console.log(actionPayload);
+  switch(actionPayload.action)
   {
     case "check": break;
     case "call": addToPot(roomID, userID, lastBet); break;
-    case "raise": addToPot(roomID, userID, action.value); break;
-    case "fold": break;
+    case "raise": addToPot(roomID, userID, actionPayload.amount, true); break;
+    case "fold":
+      let turnQueue = room.turnQueue;
+      turnQueue.splice(turnQueue.indexOf(userID), 1);
+      await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+      break;
     default: return false;
   }
   return true;
@@ -182,23 +197,38 @@ async function updateQueue(roomID)
   const turnQueue = room.turnQueue;
 
   turnQueue.push(turnQueue.shift());
-  const updatedRoom = await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
+  await Room.updateOne({ _id: room._id }, { turnQueue: turnQueue });
 }
 
 async function dealCards(roomID, turnQueue = [], amount = 1)
 {
   let cards = await cardsAPI.drawFromDeck(roomID, amount * turnQueue.length);
-  for(let player of [...turnQueue].flat())
+
+  console.log("\n***** Dealing Cards: ");
+
+  let select = 0;
+  for(let card of cards.cards)
   {
-    let card = cards.cards.pop().code;
-    await cardsAPI.addToPlayerHand(roomID, player, card);
+    let cardCode = card.code;
+    await cardsAPI.addToPlayerHand(roomID, turnQueue[select], cardCode);
+    console.log("dealt:", cardCode, "to", turnQueue[select]);
+    select = (select + 1) % turnQueue.length;
   }
 }
 
 async function getHandRank(roomID, userID)
 {
-  const gameData = await cardsAPI.viewPlayerHand(roomID, userID);
-  let cards = gameData.piles[userID].cards || [];
+  let playerHand = await cardsAPI.viewPlayerHand(roomID, userID);
+  playerHand = playerHand.piles[userID].cards;
+  playerHand = playerHand.map((card) => { return card.code; });
+  console.log("Player hand (codes): ", playerHand);
+
+  let communityHand = await cardsAPI.viewPlayerHand(roomID, "community");
+  communityHand = communityHand.piles["community"].cards;
+  communityHand = communityHand.map((card) => { return card.code; });
+  console.log("Community hand (codes): ", communityHand);
+
+  return rankHand(playerHand, communityHand);
 }
 
 async function clearPiles(roomID)
@@ -207,22 +237,31 @@ async function clearPiles(roomID)
   const cardData = await cardsAPI.viewPlayerHand(roomID, "ALL");
   const piles = cardData.piles || {};
 
+  console.log("\n****** CLEARING CARDS");
+
   // for-in returns a key, which is the name of the pile in the api
   // awaiting to allow function to complete before doing multiple api calls.
   for(let pile in piles)
     await cardsAPI.returnPlayerHandToDeck(roomID, pile);
 
   await cardsAPI.returnDiscarded(roomID);
+  await cardsAPI.reshuffleDeck(roomID);
 }
 
-async function addToPot(roomID, userID, amount = 0)
+async function addToPot(roomID, userID, amount = 0, raise = false)
 {
   const room = await Room.findOne({ deckID: roomID });
   const user = await User.findOne({ _id: userID });
   let potValue = amount + room.pot;
   let userValue = user.money - amount;
 
-  await Room.updateOne({ _id: room._id }, { pot: potValue });
+  let bet = amount;
+  if(raise)
+    bet = room.lastBet + amount;
+
+  console.log(`Adding ${amount} to pot`);
+
+  await Room.updateOne({ _id: room._id }, { pot: potValue, lastBet: bet });
   await User.updateOne({ _id: userID }, { money: userValue });
 }
 

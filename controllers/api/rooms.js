@@ -33,6 +33,7 @@ async function joinRoomDispatch(req)
 {
   const roomID = req.params["roomID"];
   const room = await Room.findOne({ deckID: roomID });
+  if(!room) return false;
   
   console.log("Joining room: ", room);
   if(room.started) return false;
@@ -81,13 +82,11 @@ async function startGameDispatch(req)
   
   if(updatedRoom.modifiedCount >= 1 && turnQueue.length > 1)
   {
-    /* 
-      Due to previous implementation, I have to return a value. 
-      false ensures the start sequence won't run twice as the processResponsePoll function
-      starts the game for all in the poll.
-    */
-    processResponsePoll(roomID);
     console.log(`\n*** Starting game in room ${roomID}.\n`);
+    
+    // This lets db updates catchup before the game is initialized, preventing runtime errors
+    setTimeout(() => {processResponsePoll(roomID)}, 1000); 
+    
     return true; 
   }
   return null;
@@ -95,10 +94,13 @@ async function startGameDispatch(req)
 
 async function getUsersDispatch(req)
 {
-  
-  const roomID = req.params["roomID"];
+  const roomID = req.params["roomID"];   
   const room = await Room.findOne({ deckID: roomID });
+  if(!room) return false;
+  
   const userIDArr = room.connectedUserIDs;
+  
+  if(room.started) return false;
   
   let users = [];
   for(let userID of userIDArr)
@@ -133,20 +135,19 @@ function newRoom(cardAPIData)
 
 async function initializeRoom(roomID, turnQueue = [])
 {
-  let gameData = await cardsAPI.drawFromDeck(roomID, 1);
-  let card = gameData.cards[0].code;
-  
-  await cardsAPI.addToPlayerHand(roomID, "community", card);
-  await cardsAPI.returnPlayerHandToDeck(roomID, "community");
-
+  turnQueue.push("community");
   for(let userID of turnQueue)
   {
-    let gameData = await cardsAPI.drawFromDeck(roomID, 1);
-    let card = gameData.cards[0].code;
+    let drawData = await cardsAPI.drawFromDeck(roomID, 1);
+    let card = drawData.cards[0].code;
     
     await cardsAPI.addToPlayerHand(roomID, userID, card);
-    await cardsAPI.returnPlayerHandToDeck(roomID, userID);
   }
+  
+  let gameData = await cardsAPI.viewPlayerHand(roomID, "all");
+  let piles = gameData.piles;
+  for(let pile of Object.keys(piles))
+    await cardsAPI.returnPlayerHandToDeck(roomID, pile);
   
   console.log("Room initialization complete");
 }

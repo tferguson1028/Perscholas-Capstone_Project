@@ -9,17 +9,19 @@ import styles from "./RoomPage.module.css";
 function RoomPage(props)
 {
   const { user, room, setRoom } = props;
-  const [ error, setError ] = useState();
-  const [ userList, setUserList ] = useState([]);
-  
-  useEffect(() => { getUsers() }, []);
-  
+  const [error, setError] = useState();
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => { getUsers(); }, []);
+
   async function getUsers()
   {
     const users = await roomService.getUsers(room);
-    setUserList(users);
-    
-    setTimeout(getUsers, 10000);
+    if(users)
+    {
+      setUserList(users);
+      setTimeout(getUsers, 5000);
+    }
   }
   
   return (
@@ -27,11 +29,11 @@ function RoomPage(props)
       <section>
         <h1>Waiting Room</h1>
         <code>{room}</code>
+        {error ? <p className='ErrorMessage'>{error}</p> : <></>}
       </section>
       <RoomStatus user={user} users={userList} />
       <section>
         <RoomControls user={user} room={room} setRoom={setRoom} setError={setError} />
-        {error ? <p className='error'>{error}</p> : <></>}
       </section>
     </main>
   );
