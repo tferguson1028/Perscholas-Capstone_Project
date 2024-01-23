@@ -1,7 +1,7 @@
 <img src="./public/logo_image.png" alt="Play Ace Logo" width="100%" />
-<span><img src="./public/demo_image_0.png" alt="Home Page" width="33%"></span>
-<span><img src="./public/demo_image_1.png" alt="Game Page" width="33%"></span>
-<span><img src="./public/demo_image_2.png" alt="Waiting Room Page" width="33%"></span>
+<span><img src="./public/demo_image_0.png" alt="Home Page" width="32.8%"></span>
+<span><img src="./public/demo_image_1.png" alt="Game Page" width="32.8%"></span>
+<span><img src="./public/demo_image_2.png" alt="Waiting Room Page" width="32.8%"></span>
 </br>
 
 # Play Ace - Free Online Poker
@@ -9,8 +9,6 @@
 A full-stack React app where you can play poker with multiple people. 
 Users can securely sign up and login to the application and begin playing. 
 Every user gets 100,000 tokens to use for the game and no real money is used for the game.
-
-A paragraph used to introduce interested parties to the project and needs to include one or more screenshots.
 
 ## Getting Started
 [Trello Board](https://trello.com/b/gZqUsYnR/perscholas-capstone)
