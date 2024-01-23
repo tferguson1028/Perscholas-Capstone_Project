@@ -1,10 +1,7 @@
-<img style="width: 100%; margin: 0; padding: 0;" src="./public/logo_image.png" alt="Play Ace Logo" />
-<div style="display: flex; width: 100%; height: 200px; margin: 0; padding: 0;">
-  <img style="flex: 1; object-fit: cover; margin: 0; padding: 0;" src="./public/demo_image_0.png" alt="">
-  <img style="flex: 1; object-fit: cover; margin: 0; padding: 0;" src="./public/demo_image_1.png" alt="">
-  <img style="flex: 1; object-fit: cover; margin: 0; padding: 0;" src="./public/demo_image_2.png" alt="">
-</div>
-
+<img src="./public/logo_image.png" alt="Play Ace Logo" width="100%" />
+<span><img src="./public/demo_image_0.png" alt="Home Page" width="33%"></span>
+<span><img src="./public/demo_image_1.png" alt="Game Page" width="33%"></span>
+<span><img src="./public/demo_image_2.png" alt="Waiting Room Page" width="33%"></span>
 </br>
 
 # Play Ace - Free Online Poker
