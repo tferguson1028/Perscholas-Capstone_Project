@@ -13,7 +13,7 @@ function LogoSmall()
         <span className={styles.LogoSuit}>♣</span>
         <span className={styles.LogoSuit}>♦</span>
       </div>
-      <h1>Card Site</h1>
+      <h1 style={{fontFamily: "Georgia"}}>PLAY ACE</h1>
     </div>
   );
 }
