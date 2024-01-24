@@ -1,0 +1,23 @@
+[
+  {
+    $addFields:
+      /**
+       * newField: The new field name.
+       * expression: The new field expression.
+       */
+      {
+        started: false,
+        pot: 0,
+        lastBet: 0,
+        connectedUserIDs: [],
+        turnsDone: 0,
+      },
+  },
+  {
+    $out:
+      /**
+       * Provide the name of the output collection.
+       */
+      "rooms",
+  },
+]
